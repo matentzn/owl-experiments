@@ -146,6 +146,7 @@ public class CompareOntologies {
 			OWLOntologyManager manexp = OWLManager.createOWLOntologyManager();
 
 			OWLOntology o = manexp.createOntology(difference);
+			if(!compid.isEmpty()) {
 			String expofilename = o1_short + "_" + o2_short + "_" + compid;
 			if (!(new File(exportDir, expofilename)).exists()) {
 				try {
@@ -155,6 +156,7 @@ public class CompareOntologies {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} 
+			}
 			}
 
 		} catch (OWLOntologyCreationException e) {
