@@ -2,7 +2,6 @@ package owl.cs.man.ac.uk.experiment.util;
 
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.elk.owlapi.ElkReasonerFactory;
-import org.semanticweb.more.MOReReasonerFactory;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
 //import org.semanticweb.more.MOReReasonerFactory;
@@ -12,7 +11,6 @@ import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 
-import uk.ac.manchester.cs.factplusplus.owlapiv3.FaCTPlusPlusReasonerFactory;
 //import owl.cs.manchester.adreasoner.ADReasonerFactory;
 //import uk.ac.manchester.cs.chainsaw.ChainsawReasonerFactory;
 import uk.ac.manchester.cs.jfact.JFactFactory;
@@ -36,9 +34,9 @@ public class ReasonerUtilities {
 	public static OWLReasonerFactory getFactory(String reasonername) {
 		if (reasonername.startsWith("hermit")) {
 			return new Reasoner.ReasonerFactory();
-		} else if (reasonername.startsWith("fact")) {
+		} /*else if (reasonername.startsWith("fact")) {
 			return new FaCTPlusPlusReasonerFactory();
-		} else if (reasonername.startsWith("jfact")) {
+		} */else if (reasonername.startsWith("jfact")) {
 			return new JFactFactory();
 		} else if (reasonername.startsWith("pellet")) {
 			return new PelletReasonerFactory();
@@ -46,7 +44,7 @@ public class ReasonerUtilities {
 			return new StructuralReasonerFactory();
 		} else if (reasonername.startsWith("elk")) {
 			return new ElkReasonerFactory();
-		} else if (reasonername.startsWith("more")) {
+		} /*else if (reasonername.startsWith("more")) {
 			String[] p = reasonername.split("-");
 			if (p.length != 2) {
 				throw new IllegalArgumentException(
@@ -69,7 +67,7 @@ public class ReasonerUtilities {
 								+ " starts with more but does not contain a valid delegate: more-hermit/pellet/jfact");
 			}
 			return new MOReReasonerFactory(del);
-		}
+		}*/
 			
 		
 		// removed because we want reasoning with more

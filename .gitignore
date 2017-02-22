@@ -4,3 +4,5 @@
 *.prefs
 /target/
 .settings
+target/
+target/classes/owl/cs/man/ac/uk/experiment/classification/default.properties
