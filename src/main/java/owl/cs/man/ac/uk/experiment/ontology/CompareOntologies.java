@@ -69,7 +69,7 @@ public class CompareOntologies {
 			throw new IOException(ontology2 + " does not exist!");
 		}
 
-		System.out.println("TBOXDIR: " + ontology1);
+		//System.out.println("TBOXDIR: " + ontology1);
 		
 		List<Map<String,String>> exportdata = new ArrayList<Map<String,String>>();
 		
@@ -82,7 +82,7 @@ public class CompareOntologies {
 		}
 		else {
 		for (File o1 : ontology1.listFiles(new OntologyFileNameFilter())) {
-			System.out.println(o1);
+			//System.out.println(o1);
 			String filename = o1.getName().replaceAll("_functional.owl", "");
 			for (File o2 : ontology2.listFiles(new OntologyFileNameFilter())) {
 				if (o2.getName().contains(filename)) {
@@ -217,7 +217,7 @@ public class CompareOntologies {
 		System.out.println("Axioms in " + o1_short + " that are not in "
 				+ o2_short);
 		for (OWLAxiom ax : o1_wo_o2) {
-			System.out.println(ax);
+			//System.out.println(ax);
 		}
 		
 
@@ -231,7 +231,7 @@ public class CompareOntologies {
 		System.out.println("Axioms in " + o2_short + " that are not in "
 				+ o1_short);
 		for (OWLAxiom ax : o2_wo_o1) {
-		 System.out.println(ax);
+		 //System.out.println(ax);
 		}
 		//AnalysisUtils.pp("AXIOMS");
 
@@ -247,14 +247,14 @@ public class CompareOntologies {
 		System.out.println("Entities in " + o1_short + " that are not in "
 				+ o2_short);
 		for (OWLEntity e : entitieso1) {
-			System.out.println(e);
+			//System.out.println(e);
 		}
 		System.out.println("");
 		System.out.println("#################");
 		System.out.println("Entities in " + o2_short + " that are not in "
 				+ o1_short);
 		for (OWLEntity e : entitieso2) {
-			System.out.println(e);
+			//System.out.println(e);
 		}
 
 		// Axiomtypes that are not in one but are in the other
@@ -281,23 +281,23 @@ public class CompareOntologies {
 			// if o1 contains o2
 			obtainAxiomTypeSignatureMap(difference, sigo1, entitieso2,
 					axiomtypeanalysis);
-			System.out.println(o1_short + ":old " + o2_short
-					+ ":new (signature in difference)");
+			//System.out.println(o1_short + ":old " + o2_short
+					//+ ":new (signature in difference)");
 		} else if (o2_wo_o1.isEmpty()) {
 			// if o2 contains o1
 			obtainAxiomTypeSignatureMap(difference, sigo2, entitieso1,
 					axiomtypeanalysis);
-			System.out.println(o2_short + ":old " + o1_short
-					+ ":new (signature in difference)");
+			//System.out.println(o2_short + ":old " + o1_short
+					//+ ":new (signature in difference)");
 		}
 
 		for (String axt : axiomtypeanalysis.keySet()) {
-			System.out.println("");
-			System.out.println(axt);
+			//System.out.println("");
+			//System.out.println(axt);
 			StringBuilder sb = new StringBuilder();
 			for (String type : axiomtypeanalysis.get(axt).keySet()) {
-				System.out.println(type + ": "
-						+ axiomtypeanalysis.get(axt).get(type));
+				//System.out.println(type + ": "
+						//+ axiomtypeanalysis.get(axt).get(type));
 				sb.append(type + ":" + axiomtypeanalysis.get(axt).get(type)
 						+ " ");
 			}
@@ -532,7 +532,7 @@ public class CompareOntologies {
 
 		System.out.println("Axioms in o1 that are not in o2: "+o1_wo_o2.size());
 		for (OWLAxiom ax : o1_wo_o2) {
-			System.out.println(ax);
+			//System.out.println(ax);
 		}
 
 		Set<OWLAxiom> o2_wo_o1 = new HashSet<OWLAxiom>();
@@ -542,7 +542,7 @@ public class CompareOntologies {
 		
 		System.out.println("Axioms in o2 that are not in o1: "+o2_wo_o1.size());
 		for (OWLAxiom ax : o2_wo_o1) {
-			System.out.println(ax);
+			//System.out.println(ax);
 		}
 		
 		return (o2_wo_o1.isEmpty() & o1_wo_o2.isEmpty());

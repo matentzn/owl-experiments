@@ -626,7 +626,7 @@ public class OWLObjectChanger implements OWLObjectVisitorEx<OWLObject> {
 
     
     public OWLHasKeyAxiom visit(OWLHasKeyAxiom axiom) {
-        Set<OWLPropertyExpression<?, ?>> props = duplicateSet(axiom
+        Set<OWLPropertyExpression> props = duplicateSet(axiom
                 .getPropertyExpressions());
         return df.getOWLHasKeyAxiom(duplicate(axiom.getClassExpression()),
                 props, duplicateAxiomAnnotations(axiom));

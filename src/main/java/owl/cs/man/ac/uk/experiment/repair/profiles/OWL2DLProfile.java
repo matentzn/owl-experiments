@@ -164,7 +164,7 @@ public class OWL2DLProfile implements OWLProfile {
 	}
 
 	private static class OWL2DLProfileObjectVisitor extends
-			OWLOntologyWalkerVisitor<Object> {
+			OWLOntologyWalkerVisitor {
 		private OWLObjectPropertyManager objectPropertyManager = null;
 		private final OWLOntologyManager manager;
 		private final Set<OWLProfileViolation> profileViolations = new HashSet<OWLProfileViolation>();
@@ -188,150 +188,135 @@ public class OWL2DLProfile implements OWLProfile {
 		}
 
 		@Override
-		public Object visit(OWLDataOneOf node) {
+		public void visit(OWLDataOneOf node) {
 			if (node.getValues().isEmpty()) {
 				profileViolations.add(new EmptyOneOfExpression(getCurrentOntology(),
 						getCurrentAxiom()));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLDataUnionOf node) {
+		public void visit(OWLDataUnionOf node) {
 			if (node.getOperands().size() < 2) {
 				profileViolations.add(new InsufficientDataRangeOperands(
 						getCurrentOntology(), getCurrentAxiom(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLDataIntersectionOf node) {
+		public void visit(OWLDataIntersectionOf node) {
 			if (node.getOperands().size() < 2) {
 				profileViolations.add(new InsufficientDataRangeOperands(
 						getCurrentOntology(), getCurrentAxiom(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLObjectIntersectionOf node) {
+		public void visit(OWLObjectIntersectionOf node) {
 			if (node.getOperands().size() < 2) {
 				profileViolations.add(new InsufficientObjectExpressionOperands(
 						getCurrentOntology(), getCurrentAxiom(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLObjectOneOf node) {
+		public void visit(OWLObjectOneOf node) {
 			if (node.getIndividuals().isEmpty()) {
 				profileViolations.add(new EmptyOneOfExpression(getCurrentOntology(),
 						getCurrentAxiom()));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLObjectUnionOf node) {
+		public void visit(OWLObjectUnionOf node) {
 			if (node.getOperands().size() < 2) {
 				profileViolations.add(new InsufficientObjectExpressionOperands(
 						getCurrentOntology(), getCurrentAxiom(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLEquivalentClassesAxiom node) {
+		public void visit(OWLEquivalentClassesAxiom node) {
 			if (node.getClassExpressions().size() < 2) {
 				profileViolations.add(new InsufficientAxiomOperands(
 						getCurrentOntology(), node, node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLDisjointClassesAxiom node) {
+		public void visit(OWLDisjointClassesAxiom node) {
 			if (node.getClassExpressions().size() < 2) {
 				profileViolations.add(new InsufficientAxiomOperands(
 						getCurrentOntology(), node, node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLDisjointUnionAxiom node) {
+		public void visit(OWLDisjointUnionAxiom node) {
 			if (node.getClassExpressions().size() < 2) {
 				profileViolations.add(new InsufficientAxiomOperands(
 						getCurrentOntology(), node, node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLEquivalentObjectPropertiesAxiom node) {
+		public void visit(OWLEquivalentObjectPropertiesAxiom node) {
 			if (node.getProperties().size() < 2) {
 				profileViolations.add(new InsufficientPropertyExpressions(
 						getCurrentOntology(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLDisjointDataPropertiesAxiom node) {
+		public void visit(OWLDisjointDataPropertiesAxiom node) {
 			if (node.getProperties().size() < 2) {
 				profileViolations.add(new InsufficientPropertyExpressions(
 						getCurrentOntology(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLEquivalentDataPropertiesAxiom node) {
+		public void visit(OWLEquivalentDataPropertiesAxiom node) {
 			if (node.getProperties().size() < 2) {
 				profileViolations.add(new InsufficientPropertyExpressions(
 						getCurrentOntology(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLHasKeyAxiom node) {
+		public void visit(OWLHasKeyAxiom node) {
 			if (node.getPropertyExpressions().size() < 1) {
 				profileViolations.add(new InsufficientPropertyExpressions(
 						getCurrentOntology(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLSameIndividualAxiom node) {
+		public void visit(OWLSameIndividualAxiom node) {
 			if (node.getIndividuals().size() < 2) {
 				profileViolations.add(new InsufficientIndividuals(
 						getCurrentOntology(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLDifferentIndividualsAxiom node) {
+		public void visit(OWLDifferentIndividualsAxiom node) {
 			if (node.getIndividuals().size() < 2) {
 				profileViolations.add(new InsufficientIndividuals(
 						getCurrentOntology(), node));
 			}
-			return null;
 		}
 
 		@Override
-		public Object visit(OWLOntology ontology) {
+		public void visit(OWLOntology ontology) {
 			OWLOntologyID ontologyID = ontology.getOntologyID();
 			if (!ontologyID.isAnonymous()) {
-				if (ontologyID.getOntologyIRI().isReservedVocabulary()) {
+				if (ontologyID.getOntologyIRI().or(IRI.create("")).isReservedVocabulary()) {
 					profileViolations
 							.add(new UseOfReservedVocabularyForOntologyIRI(
 									getCurrentOntology()));
 				}
-				IRI versionIRI = ontologyID.getVersionIRI();
+				IRI versionIRI = ontologyID.getVersionIRI().or(IRI.create(""));
 				if (versionIRI != null) {
 					if (versionIRI.isReservedVocabulary()) {
 						profileViolations
@@ -341,11 +326,10 @@ public class OWL2DLProfile implements OWLProfile {
 				}
 			}
 			objectPropertyManager = null;
-			return super.visit(ontology);
 		}
 
 		@Override
-		public Object visit(OWLClass desc) {
+		public void visit(OWLClass desc) {
 			boolean reserved = false;
 			if (!desc.isBuiltIn()) {
 				if (desc.getIRI().isReservedVocabulary()) {
@@ -358,7 +342,7 @@ public class OWL2DLProfile implements OWLProfile {
 			}
 			if (!reserved) {
 				if (!desc.isBuiltIn()
-						&& !getCurrentOntology().isDeclared(desc, true)) {
+						&& !getCurrentOntology().isDeclared(desc)) {
 					profileViolations.add(new UseOfUndeclaredClass(
 							getCurrentOntology(), getCurrentAxiom(), desc));
 				}
@@ -370,11 +354,11 @@ public class OWL2DLProfile implements OWLProfile {
 									.getIRI()));
 				}
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLDatatype datatype) {
+		public void visit(OWLDatatype datatype) {
 			// Each datatype MUST statisfy the following:
 			// An IRI used to identify a datatype MUST
 			// - Identify a datatype in the OWL 2 datatype map (Section 4.1
@@ -393,7 +377,7 @@ public class OWL2DLProfile implements OWLProfile {
 						profileViolations.add(new UseOfUnknownDatatype(
 								getCurrentOntology(), getCurrentAxiom(),
 								datatype));
-					} else if (!getCurrentOntology().isDeclared(datatype, true)) {
+					} else if (!getCurrentOntology().isDeclared(datatype)) {
 						profileViolations.add(new UseOfUndeclaredDatatype(
 								getCurrentOntology(), getCurrentAxiom(),
 								datatype));
@@ -405,11 +389,11 @@ public class OWL2DLProfile implements OWLProfile {
 				profileViolations.add(new IllegalPunning(getCurrentOntology(),
 						getCurrentAxiom(), datatype.getIRI()));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLDatatypeDefinitionAxiom axiom) {
+		public void visit(OWLDatatypeDefinitionAxiom axiom) {
 			if (axiom.getDatatype().getIRI().isReservedVocabulary()) {
 				profileViolations
 						.add(new UseOfBuiltInDatatypeInDatatypeDefinition(
@@ -424,7 +408,7 @@ public class OWL2DLProfile implements OWLProfile {
 				profileViolations.add(new CycleInDatatypeDefinition(
 						getCurrentOntology(), axiom));
 			}
-			return null;
+			
 		}
 
 		private void getDatatypesInSignature(Set<OWLDatatype> datatypes,
@@ -445,7 +429,7 @@ public class OWL2DLProfile implements OWLProfile {
 		}
 
 		@Override
-		public Object visit(OWLObjectProperty property) {
+		public void visit(OWLObjectProperty property) {
 			boolean reserved = false;
 			if (!property.isOWLTopObjectProperty()
 					&& !property.isOWLBottomObjectProperty()) {
@@ -459,7 +443,7 @@ public class OWL2DLProfile implements OWLProfile {
 			}
 			if (!reserved) {
 				if (!property.isBuiltIn()
-						&& !getCurrentOntology().isDeclared(property, true)) {
+						&& !getCurrentOntology().isDeclared(property)) {
 					profileViolations.add(new UseOfUndeclaredObjectProperty(
 							getCurrentOntology(), getCurrentAxiom(), property));
 
@@ -477,11 +461,11 @@ public class OWL2DLProfile implements OWLProfile {
 									.getIRI()));
 				}
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLDataProperty property) {
+		public void visit(OWLDataProperty property) {
 			boolean reserved = false;
 			if (!property.isOWLTopDataProperty()
 					&& !property.isOWLBottomDataProperty()) {
@@ -495,7 +479,7 @@ public class OWL2DLProfile implements OWLProfile {
 			}
 			if (!reserved) {
 				if (!property.isBuiltIn()
-						&& !getCurrentOntology().isDeclared(property, true)) {
+						&& !getCurrentOntology().isDeclared(property)) {
 					profileViolations.add(new UseOfUndeclaredDataProperty(
 							getCurrentOntology(), getCurrentAxiom(), property));
 				}
@@ -512,11 +496,11 @@ public class OWL2DLProfile implements OWLProfile {
 									.getIRI()));
 				}
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLAnnotationProperty property) {
+		public void visit(OWLAnnotationProperty property) {
 			boolean reserved = false;
 			if (!property.isBuiltIn()) {
 				if (property.getIRI().isReservedVocabulary()) {
@@ -529,7 +513,7 @@ public class OWL2DLProfile implements OWLProfile {
 			}
 			if (!reserved) {
 				if (!property.isBuiltIn()
-						&& !getCurrentOntology().isDeclared(property, true)) {
+						&& !getCurrentOntology().isDeclared(property)) {
 					profileViolations
 							.add(new UseOfUndeclaredAnnotationProperty(
 									getCurrentOntology(), getCurrentAxiom(),
@@ -548,11 +532,11 @@ public class OWL2DLProfile implements OWLProfile {
 									.getIRI()));
 				}
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLNamedIndividual individual) {
+		public void visit(OWLNamedIndividual individual) {
 			if (!individual.isAnonymous()
 					&& individual.getIRI().isReservedVocabulary()) {
 				profileViolations
@@ -560,101 +544,101 @@ public class OWL2DLProfile implements OWLProfile {
 								getCurrentOntology(), getCurrentAxiom(),
 								individual));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLSubDataPropertyOfAxiom axiom) {
+		public void visit(OWLSubDataPropertyOfAxiom axiom) {
 			if (axiom.getSubProperty().isOWLTopDataProperty()) {
 				profileViolations
 						.add(new UseOfTopDataPropertyAsSubPropertyInSubPropertyAxiom(
 								getCurrentOntology(), axiom));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLObjectMinCardinality desc) {
+		public void visit(OWLObjectMinCardinality desc) {
 			if (getPropertyManager().isNonSimple(desc.getProperty())) {
 				profileViolations
 						.add(new UseOfNonSimplePropertyInCardinalityRestriction(
 								getCurrentOntology(), getCurrentAxiom(), desc));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLObjectMaxCardinality desc) {
+		public void visit(OWLObjectMaxCardinality desc) {
 			if (getPropertyManager().isNonSimple(desc.getProperty())) {
 				profileViolations
 						.add(new UseOfNonSimplePropertyInCardinalityRestriction(
 								getCurrentOntology(), getCurrentAxiom(), desc));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLObjectExactCardinality desc) {
+		public void visit(OWLObjectExactCardinality desc) {
 			if (getPropertyManager().isNonSimple(desc.getProperty())) {
 				profileViolations
 						.add(new UseOfNonSimplePropertyInCardinalityRestriction(
 								getCurrentOntology(), getCurrentAxiom(), desc));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLObjectHasSelf desc) {
+		public void visit(OWLObjectHasSelf desc) {
 			if (getPropertyManager().isNonSimple(desc.getProperty())) {
 				profileViolations
 						.add(new UseOfNonSimplePropertyInObjectHasSelf(
 								getCurrentOntology(), getCurrentAxiom(), desc));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLFunctionalObjectPropertyAxiom axiom) {
+		public void visit(OWLFunctionalObjectPropertyAxiom axiom) {
 			if (getPropertyManager().isNonSimple(axiom.getProperty())) {
 				profileViolations
 						.add(new UseOfNonSimplePropertyInFunctionalPropertyAxiom(
 								getCurrentOntology(), axiom));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLInverseFunctionalObjectPropertyAxiom axiom) {
+		public void visit(OWLInverseFunctionalObjectPropertyAxiom axiom) {
 			if (getPropertyManager().isNonSimple(axiom.getProperty())) {
 				profileViolations
 						.add(new UseOfNonSimplePropertyInInverseFunctionalObjectPropertyAxiom(
 								getCurrentOntology(), axiom));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLIrreflexiveObjectPropertyAxiom axiom) {
+		public void visit(OWLIrreflexiveObjectPropertyAxiom axiom) {
 			if (getPropertyManager().isNonSimple(axiom.getProperty())) {
 				profileViolations
 						.add(new UseOfNonSimplePropertyInIrreflexivePropertyAxiom(
 								getCurrentOntology(), axiom));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLAsymmetricObjectPropertyAxiom axiom) {
+		public void visit(OWLAsymmetricObjectPropertyAxiom axiom) {
 			if (getPropertyManager().isNonSimple(axiom.getProperty())) {
 				profileViolations
 						.add(new UseOfNonSimplePropertyInAsymmetricObjectPropertyAxiom(
 								getCurrentOntology(), axiom));
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLDisjointObjectPropertiesAxiom axiom) {
+		public void visit(OWLDisjointObjectPropertiesAxiom axiom) {
 			if (axiom.getProperties().size() < 2) {
 				profileViolations.add(new InsufficientPropertyExpressions(
 						getCurrentOntology(), axiom));
@@ -666,11 +650,11 @@ public class OWL2DLProfile implements OWLProfile {
 									getCurrentOntology(), axiom, prop));
 				}
 			}
-			return null;
+			
 		}
 
 		@Override
-		public Object visit(OWLSubPropertyChainOfAxiom axiom) {
+		public void visit(OWLSubPropertyChainOfAxiom axiom) {
 			// Restriction on the Property Hierarchy. A strict partial order
 			// (i.e., an irreflexive and transitive relation) < on AllOPE(Ax)
 			// exists that fulfills the following conditions:
@@ -694,7 +678,7 @@ public class OWL2DLProfile implements OWLProfile {
 			if (superProp.isOWLTopObjectProperty()
 					|| axiom.isEncodingOfTransitiveProperty()) {
 				// TOP or TRANSITIVE_PROP: no violation can occur
-				return null;
+				
 			}
 			List<OWLObjectPropertyExpression> chain = axiom.getPropertyChain();
 			final OWLObjectPropertyExpression first = chain.get(0);
@@ -735,7 +719,7 @@ public class OWL2DLProfile implements OWLProfile {
 			}
 			// neither first and last equal: they both must be smaller, checked
 			// already in the else branches
-			return null;
+			
 		}
 	}
 }

@@ -13,6 +13,9 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
+import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.io.OWLFunctionalSyntaxOntologyFormat;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
@@ -21,6 +24,7 @@ import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyFormat;
@@ -205,7 +209,7 @@ public class OntologySerialiser {
 			String name, OWLOntologyManager manager)
 			throws OWLOntologyCreationException, FileNotFoundException,
 			OWLOntologyStorageException {
-		OWLOntologyFormat format = new OWLFunctionalSyntaxOntologyFormat();
+		OWLDocumentFormat format = new FunctionalSyntaxDocumentFormat();
 		return save(targetDir, ontology, manager, format, name); // +OntologyFileExtensions.FUNCTIONAL
 	}
 
@@ -213,7 +217,7 @@ public class OntologySerialiser {
 			String name, OWLOntologyManager manager)
 			throws OWLOntologyCreationException, FileNotFoundException,
 			OWLOntologyStorageException {
-		OWLOntologyFormat format = new RDFXMLOntologyFormat();
+		OWLDocumentFormat format = new RDFXMLDocumentFormat();
 		return save(targetDir, ontology, manager, format, name); // +OntologyFileExtensions.RDFXML
 	}
 
@@ -221,12 +225,12 @@ public class OntologySerialiser {
 			String name, OWLOntologyManager manager)
 			throws OWLOntologyCreationException, FileNotFoundException,
 			OWLOntologyStorageException {
-		OWLOntologyFormat format = new OWLXMLOntologyFormat();
+		OWLDocumentFormat format = new OWLXMLDocumentFormat();
 		return save(targetDir, ontology, manager, format, name); // +OntologyFileExtensions.OWLXML
 	}
 
 	private static File save(File targetDir, OWLOntology ontology,
-			OWLOntologyManager manager, OWLOntologyFormat format, String name)
+			OWLOntologyManager manager, OWLDocumentFormat format, String name)
 			throws OWLOntologyCreationException, FileNotFoundException,
 			OWLOntologyStorageException {
 		if (!targetDir.exists()) {
@@ -237,6 +241,7 @@ public class OntologySerialiser {
 		File file = new File(targetDir, name);
 		OutputStream os = new FileOutputStream(file);
 		manager.saveOntology(ontology, format, os);
+		
 		return file;
 	}
 

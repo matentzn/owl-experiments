@@ -24,6 +24,7 @@ import org.semanticweb.owlapi.metrics.ReferencedDataPropertyCount;
 import org.semanticweb.owlapi.metrics.ReferencedIndividualCount;
 import org.semanticweb.owlapi.metrics.ReferencedObjectPropertyCount;
 import org.semanticweb.owlapi.model.AxiomType;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
@@ -44,6 +45,7 @@ import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
+import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.util.DLExpressivityChecker;
 
 import owl.cs.man.ac.uk.experiment.ontology.MetricsLabels;
@@ -114,11 +116,11 @@ public class StaticMetrics implements Metrics {
 
 	// ENTITIES
 
-	public int getSignatureSize(boolean includeImportsClosure) {
+	public int getSignatureSize(Imports includeImportsClosure) {
 		return getOntology().getSignature(includeImportsClosure).size();
 	}
 
-	public int getUndeclaredEntitiesCount(boolean includeImportsClosure) {
+	public int getUndeclaredEntitiesCount(Imports includeImportsClosure) {
 		int undeclared = 0;
 		for (OWLEntity entity : getOntology().getSignature(
 				includeImportsClosure)) {
@@ -358,7 +360,7 @@ public class StaticMetrics implements Metrics {
 		return getLogicalAxioms(includeImportsClosure, true).size();
 	}
 
-	public int getTBoxSize(boolean useImportsClosure) {
+	public int getTBoxSize(Imports useImportsClosure) {
 		return getOntology().getTBoxAxioms(useImportsClosure).size();
 	}
 
@@ -371,11 +373,11 @@ public class StaticMetrics implements Metrics {
 		return i;
 	}
 
-	public int getABoxSize(boolean useImportsClosure) {
+	public int getABoxSize(Imports useImportsClosure) {
 		return getOntology().getABoxAxioms(useImportsClosure).size();
 	}
 
-	public int getRBoxSize(boolean useImportsClosure) {
+	public int getRBoxSize(Imports useImportsClosure) {
 		return getOntology().getRBoxAxioms(useImportsClosure).size();
 	}
 
@@ -510,7 +512,7 @@ public class StaticMetrics implements Metrics {
 		}
 
 		for (OWLImportsDeclaration im : getOntology().getImportsDeclarations()) {
-			String iri = im.getURI().toString();
+			String iri = im.getIRI().toString();
 			if (!missingImportTracker.getMissingImports().contains(iri)) {
 				validImports.add(iri);
 			}
@@ -523,7 +525,7 @@ public class StaticMetrics implements Metrics {
 	public int getReferencedClassCount(boolean useImportsClosure) {
 		// TODO verify this
 		AbstractOWLMetric<Integer> metric = new ReferencedClassCount(
-				getManager());
+				getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -532,7 +534,7 @@ public class StaticMetrics implements Metrics {
 	public int getReferencedDataPropertyCount(boolean useImportsClosure) {
 		// TODO verify this
 		AbstractOWLMetric<Integer> metric = new ReferencedDataPropertyCount(
-				getManager());
+				getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -541,7 +543,7 @@ public class StaticMetrics implements Metrics {
 	public int getReferencedIndividualCount(boolean useImportsClosure) {
 		// TODO verify this
 		AbstractOWLMetric<Integer> metric = new ReferencedIndividualCount(
-				getManager());
+				getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -550,7 +552,7 @@ public class StaticMetrics implements Metrics {
 	public int getReferencedObjectPropertyCount(boolean useImportsClosure) {
 		// TODO verify this
 		AbstractOWLMetric<Integer> metric = new ReferencedObjectPropertyCount(
-				getManager());
+				getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -561,7 +563,7 @@ public class StaticMetrics implements Metrics {
 	public int getMultipleInheritanceCount(boolean useImportsClosure) {
 		// TODO verify this
 		AbstractOWLMetric<Integer> metric = new NumberOfClassesWithMultipleInheritance(
-				getManager());
+				getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -570,7 +572,7 @@ public class StaticMetrics implements Metrics {
 	public int getMaximumNumberOfNamedSuperclasses(boolean useImportsClosure) {
 		// TODO verify this
 		AbstractOWLMetric<Integer> metric = new MaximumNumberOfNamedSuperclasses(
-				getManager());
+				getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -578,7 +580,7 @@ public class StaticMetrics implements Metrics {
 
 	public int getGCICount(boolean useImportsClosure) {
 		// TODO verify this
-		AbstractOWLMetric<Integer> metric = new GCICount(getManager());
+		AbstractOWLMetric<Integer> metric = new GCICount(getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -586,7 +588,7 @@ public class StaticMetrics implements Metrics {
 
 	public int getHiddenGCICount(boolean useImportsClosure) {
 		// TODO verify this
-		AbstractOWLMetric<Integer> metric = new HiddenGCICount(getManager());
+		AbstractOWLMetric<Integer> metric = new HiddenGCICount(getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -595,7 +597,7 @@ public class StaticMetrics implements Metrics {
 	public double getAverageAssertedNamedSuperclasses(boolean useImportsClosure) {
 		// TODO verify this
 		AbstractOWLMetric<Double> metric = new AverageAssertedNamedSuperclassCount(
-				getManager());
+				getOntology());
 		metric.setImportsClosureUsed(useImportsClosure);
 		metric.setOntology(getOntology());
 		return metric.getValue();
@@ -657,12 +659,12 @@ public class StaticMetrics implements Metrics {
 		if (ontologyID.isAnonymous()) {
 			return "none";
 		} else {
-			return ontologyID.getOntologyIRI().getScheme();
+			return ontologyID.getOntologyIRI().or(IRI.create("")).getScheme();
 		}
 	}
 
 	public String getExpressivity(boolean importsClosureUsed) {
-		DLExpressivity dl = new DLExpressivity(getManager());
+		DLExpressivity dl = new DLExpressivity(getOntology());
 		dl.setImportsClosureUsed(importsClosureUsed);
 		dl.setOntology(getOntology());
 		return dl.getValue();
@@ -783,7 +785,7 @@ public class StaticMetrics implements Metrics {
 		return getBuiltInDatatypes(includeImportsClosure).size();
 	}
 
-	public String getSignatureWithoutIRIs(boolean incl) {
+	public String getSignatureWithoutIRIs(Imports incl) {
 		StringBuilder b = new StringBuilder();
 		for (OWLEntity e : getOntology().getSignature(incl)) {
 			if (e.isBottomEntity() || e.isTopEntity()) {
@@ -894,8 +896,8 @@ public class StaticMetrics implements Metrics {
 				getLogicalAxiomCount(false) + "");
 		csvData.put(prefix + MetricsLabels.LOGICAL_AXIOM_COUNT_INCL,
 				getLogicalAxiomCount(true) + "");
-		csvData.put(prefix + MetricsLabels.TBOX_SIZE, getTBoxSize(false) + "");
-		csvData.put(prefix + MetricsLabels.TBOX_SIZE_INCL, getTBoxSize(true)
+		csvData.put(prefix + MetricsLabels.TBOX_SIZE, getTBoxSize(Imports.EXCLUDED) + "");
+		csvData.put(prefix + MetricsLabels.TBOX_SIZE_INCL, getTBoxSize(Imports.INCLUDED)
 				+ "");
 		csvData.put(prefix + MetricsLabels.TBOXRBOX_SIZE,
 				getTBoxRboxSize(false) + "");
@@ -906,16 +908,16 @@ public class StaticMetrics implements Metrics {
 		csvData.put(prefix + MetricsLabels.RULE_CT_INCL, getNumberOfRules(true)
 				+ "");
 
-		csvData.put(prefix + MetricsLabels.RBOX_SIZE, getRBoxSize(false) + "");
-		csvData.put(prefix + MetricsLabels.RBOX_SIZE_INCL, getRBoxSize(true)
+		csvData.put(prefix + MetricsLabels.RBOX_SIZE, getRBoxSize(Imports.EXCLUDED) + "");
+		csvData.put(prefix + MetricsLabels.RBOX_SIZE_INCL, getRBoxSize(Imports.INCLUDED)
 				+ "");
-		csvData.put(prefix + MetricsLabels.ABOX_SIZE, getABoxSize(false) + "");
-		csvData.put(prefix + MetricsLabels.ABOX_SIZE_INCL, getABoxSize(true)
+		csvData.put(prefix + MetricsLabels.ABOX_SIZE, getABoxSize(Imports.EXCLUDED) + "");
+		csvData.put(prefix + MetricsLabels.ABOX_SIZE_INCL, getABoxSize(Imports.INCLUDED)
 				+ "");
 		csvData.put(prefix + MetricsLabels.SIGNATURE_SIZE_INCL,
-				getSignatureSize(true) + "");
+				getSignatureSize(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.SIGNATURE_SIZE,
-				getSignatureSize(false) + "");
+				getSignatureSize(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.BOOL_PROFILE_OWL2, isOWL2Profile()
 				+ "");
 		csvData.put(prefix + MetricsLabels.BOOL_PROFILE_OWL2_DL,
@@ -1051,9 +1053,9 @@ public class StaticMetrics implements Metrics {
 		
 		csvData.put(MetricsLabels.SYNTAX, getSyntax() + "");
 		csvData.put(MetricsLabels.UNDECLARED_ENTITY_COUNT_INCL,
-				getUndeclaredEntitiesCount(true) + "");
+				getUndeclaredEntitiesCount(Imports.INCLUDED) + "");
 		csvData.put(MetricsLabels.UNDECLARED_ENTITY_COUNT,
-				getUndeclaredEntitiesCount(false) + "");
+				getUndeclaredEntitiesCount(Imports.EXCLUDED) + "");
 		
 		csvData.put(MetricsLabels.TAUTOLOGYCOUNT, getTautologyCount(false) + "");
 		csvData.put(MetricsLabels.TAUTOLOGYCOUNT_INCL, getTautologyCount(true)

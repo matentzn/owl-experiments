@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -163,7 +164,7 @@ public class OntologyUtilities {
 			OWLOntology mergedOntology = OntologySerialiser.mergeImports(origOntology,"corpus-ontology-" + id);
 			OntologyUtilities.repair(mergedOntology, mergedOntology.getOWLOntologyManager());
 			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(out));
-			mergedOntology.getOWLOntologyManager().saveOntology(mergedOntology, new OWLXMLOntologyFormat(), bos);
+			mergedOntology.getOWLOntologyManager().saveOntology(mergedOntology, new OWLXMLDocumentFormat(), bos);
 			bos.close();
 			System.out.println("    ... merge successful.");
 			return mergedOntology;

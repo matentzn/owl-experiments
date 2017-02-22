@@ -30,6 +30,7 @@ import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -208,7 +209,7 @@ public class Classifier {
 		OWLAnnotationProperty label = df
 				.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
 
-		for (OWLAnnotation annotation : e.getAnnotations(ontology, label)) {
+		for (OWLAnnotation annotation : EntitySearcher.getAnnotations(e, ontology,label)) {
 			if (annotation.getValue() instanceof OWLLiteral) {
 				OWLLiteral val = (OWLLiteral) annotation.getValue();
 				return val.getLiteral();
