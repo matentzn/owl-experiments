@@ -14,6 +14,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.profiles.OWLProfileViolation;
 import org.semanticweb.owlapi.util.Version;
 
 import owl.cs.man.ac.uk.experiment.experiment.Experiment;
@@ -21,7 +22,6 @@ import owl.cs.man.ac.uk.experiment.file.FileUtilities;
 import owl.cs.man.ac.uk.experiment.metrics.StaticMetrics;
 import owl.cs.man.ac.uk.experiment.ontology.MetricsLabels;
 import owl.cs.man.ac.uk.experiment.ontology.OntologyUtilities;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWLProfileViolation;
 
 public class OntologyRepairExperiment extends Experiment {
 

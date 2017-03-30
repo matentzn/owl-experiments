@@ -8,17 +8,29 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.profiles.OWL2DLProfile;
+import org.semanticweb.owlapi.profiles.OWL2Profile;
+import org.semanticweb.owlapi.profiles.OWLProfile;
+import org.semanticweb.owlapi.profiles.OWLProfileViolation;
+import org.semanticweb.owlapi.profiles.violations.InsufficientIndividuals;
+import org.semanticweb.owlapi.profiles.violations.InsufficientPropertyExpressions;
+import org.semanticweb.owlapi.profiles.violations.OntologyIRINotAbsolute;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredAnnotationProperty;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredClass;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredDataProperty;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredDatatype;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredObjectProperty;
 
-import owl.cs.man.ac.uk.experiment.repair.profiles.*;
-import owl.cs.man.ac.uk.experiment.repair.profiles.violations.*;
+
 import owl.cs.man.ac.uk.experiment.dataset.OntologySerialiser;
+
 
 public class OntologyUtilities {
 	
@@ -29,10 +41,11 @@ public class OntologyUtilities {
 		//permittedViolationsForRepair.add(EmptyOneOfAxiom.class);
 		permittedViolationsForRepair.add(InsufficientIndividuals.class);
 		permittedViolationsForRepair.add(InsufficientPropertyExpressions.class);
-		permittedViolationsForRepair.add(InsufficientAxiomOperands.class);
-		permittedViolationsForRepair.add(InsufficientObjectExpressionOperands.class);
+		//TODO: Deal with the two following that dont exist anymore
+		//permittedViolationsForRepair.add(InsufficientAxiomOperands.class);
+		//permittedViolationsForRepair.add(InsufficientObjectExpressionOperands.class);
 		permittedViolationsForRepair.add(OntologyIRINotAbsolute.class);
-		permittedViolationsForRepair.add(OntologyVersionIRINotAbsolute.class);
+		//permittedViolationsForRepair.add(OntologyVersionIRINotAbsolute.class);
 		//permittedViolationsForRepair.add(UseOfNonAbsoluteIRI.class);
 		permittedViolationsForRepair.add(UseOfUndeclaredAnnotationProperty.class);
 		permittedViolationsForRepair.add(UseOfUndeclaredClass.class);
@@ -129,9 +142,9 @@ public class OntologyUtilities {
 		return map;
 	}
 	
-	private static Set<OWLProfileViolation> fullyRepairOntology(OWLOntology o, OWLProfile profile) {
+	private static Set<OWLProfileViolation> fullyRepairOntology(OWLOntology o, OWLProfile owl2Profile) {
 		Set<OWLProfileViolation> fixedViolations = new HashSet<OWLProfileViolation>();
-		List<OWLProfileViolation> violations = profile.checkOntology(o).getViolations();
+		List<OWLProfileViolation> violations = owl2Profile.checkOntology(o).getViolations();
 
 		for (OWLProfileViolation violation : violations) {
 			o.getOWLOntologyManager().applyChanges(violation.repair());
@@ -140,13 +153,14 @@ public class OntologyUtilities {
 		return fixedViolations;
 	}
 	
-	private static Set<OWLProfileViolation> repairOntology(OWLOntology o, OWLProfile profile) {
+	private static Set<OWLProfileViolation> repairOntology(OWLOntology o, OWLProfile owl2Profile) {
 		Set<OWLProfileViolation> fixedViolations = new HashSet<OWLProfileViolation>();
-		List<OWLProfileViolation> violations = profile.checkOntology(o).getViolations();
+		List<OWLProfileViolation> violations = owl2Profile.checkOntology(o).getViolations();
 
 		for (OWLProfileViolation violation : violations) {
 			if(permittedViolationsForRepair.contains(violation.getClass())) {
 				// in case of undeclaredEntity, check whether reserved vocabulary!
+				//System.out.println(violation.getClass());
 				o.getOWLOntologyManager().applyChanges(violation.repair());
 				fixedViolations.add(violation);
 			}

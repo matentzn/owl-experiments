@@ -33,7 +33,6 @@ import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
-import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLObjectHasValue;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
@@ -46,6 +45,14 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
 import org.semanticweb.owlapi.model.parameters.Imports;
+import org.semanticweb.owlapi.profiles.OWL2DLProfile;
+import org.semanticweb.owlapi.profiles.OWL2ELProfile;
+import org.semanticweb.owlapi.profiles.OWL2Profile;
+import org.semanticweb.owlapi.profiles.OWL2QLProfile;
+import org.semanticweb.owlapi.profiles.OWL2RLProfile;
+import org.semanticweb.owlapi.profiles.OWLProfile;
+import org.semanticweb.owlapi.profiles.OWLProfileReport;
+import org.semanticweb.owlapi.profiles.OWLProfileViolation;
 import org.semanticweb.owlapi.util.DLExpressivityChecker;
 
 import owl.cs.man.ac.uk.experiment.ontology.MetricsLabels;
@@ -53,14 +60,6 @@ import owl.cs.man.ac.uk.experiment.ontology.OntologyCycleDetector;
 import owl.cs.man.ac.uk.experiment.ontology.OntologyUtilities;
 import owl.cs.man.ac.uk.experiment.ontology.TautologyChecker;
 import owl.cs.man.ac.uk.experiment.util.ExperimentUtilities;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWL2DLProfile;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWL2ELProfile;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWL2Profile;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWL2QLProfile;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWL2RLProfile;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWLProfile;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWLProfileReport;
-import owl.cs.man.ac.uk.experiment.repair.profiles.OWLProfileViolation;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectOneOfImpl;
 
 public class StaticMetrics implements Metrics {
@@ -135,10 +134,10 @@ public class StaticMetrics implements Metrics {
 		for (OWLAxiom ax : ExperimentUtilities.getTBoxAxioms(getLogicalAxioms(b, true))) {
 			for (OWLClassExpression cl : ax.getNestedClassExpressions()) {
 				if (cl instanceof OWLObjectOneOfImpl) {
-					System.out.println(ax);
+					//System.out.println(ax);
 					return true;
 				} else if (cl instanceof OWLObjectHasValue) {
-					System.out.println(ax);
+					//System.out.println(ax);
 					return true;
 				}
 			}
@@ -867,7 +866,6 @@ public class StaticMetrics implements Metrics {
 				getIndividualsCount(true) + "");
 		csvData.put(prefix + MetricsLabels.INDIVIDUAL_COUNT,
 				getIndividualsCount(false) + "");
-
 		csvData.put(prefix + MetricsLabels.AXIOM_COMPLEXRHS_COUNT_INCL,
 				getAxiomsWithComplexRHS(true) + "");
 		csvData.put(prefix + MetricsLabels.AXIOM_COMPLEXRHS_COUNT,
@@ -907,7 +905,6 @@ public class StaticMetrics implements Metrics {
 				+ "");
 		csvData.put(prefix + MetricsLabels.RULE_CT_INCL, getNumberOfRules(true)
 				+ "");
-
 		csvData.put(prefix + MetricsLabels.RBOX_SIZE, getRBoxSize(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.RBOX_SIZE_INCL, getRBoxSize(Imports.INCLUDED)
 				+ "");
@@ -929,7 +926,6 @@ public class StaticMetrics implements Metrics {
 		csvData.put(prefix + MetricsLabels.BOOL_PROFILE_OWL2_RL,
 				isOWL2RLProfile() + "");
 		csvData.put(prefix + MetricsLabels.BOOL_PROFILE_RDFS, isRDFS() + "");
-
 		csvData.put(prefix + MetricsLabels.VIOLATION_PROFILE_OWL2_DL,
 				getOwlprofileviolations() + "");
 		csvData.put(
@@ -957,7 +953,6 @@ public class StaticMetrics implements Metrics {
 				OntologyUtilities
 						.createSpaceSeperatedStringFromSet(getAxiomTypes(true))
 						+ "");
-
 		csvData.put(
 				prefix + MetricsLabels.AXIOMTYPE_COUNT,
 				OntologyUtilities
@@ -968,19 +963,14 @@ public class StaticMetrics implements Metrics {
 				OntologyUtilities
 						.createSpaceSeperatedStringFromMap(getAxiomTypeCounts(true))
 						+ "");
-
 		csvData.put(prefix + MetricsLabels.TBOX_CONTAINS_NOMINALS_INCL,
 				isTBoxContainsNominals(true) + "");
-		
 		csvData.put(prefix + MetricsLabels.TBOX_CONTAINS_NOMINALS,
 				isTBoxContainsNominals(false) + "");
-		
 		csvData.put(prefix + MetricsLabels.ABOX_CONTAINS_NOMINALS_INCL,
 				isABoxContainsNominals(true) + "");
-		
 		csvData.put(prefix + MetricsLabels.ABOX_CONTAINS_NOMINALS,
 				isABoxContainsNominals(false) + "");
-
 		return csvData;
 	}
 
