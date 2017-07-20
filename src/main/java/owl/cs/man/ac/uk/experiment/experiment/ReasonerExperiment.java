@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
 
-import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -15,9 +13,9 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
-import owl.cs.man.ac.uk.experiment.ontology.MetricsLabels;
 import owl.cs.man.ac.uk.experiment.classification.OntologyClassification;
 import owl.cs.man.ac.uk.experiment.dataset.OntologySerialiser;
+import owl.cs.man.ac.uk.experiment.ontology.MetricsLabels;
 import owl.cs.man.ac.uk.experiment.util.ExperimentUtilities;
 import owl.cs.man.ac.uk.experiment.util.ReasonerUtilities;
 
@@ -50,9 +48,10 @@ public abstract class ReasonerExperiment extends Experiment {
 
 	protected OWLReasoner createReasoner(OWLOntology module) {
 		if(reasonername.equals("konclude")) {
-			URL url;
+			
 			try {
-				url = new URL("http://localhost:8080");
+				URL url = new URL("http://localhost:8080");
+				System.err.println("Konclude not implemented at the moment: "+url);
 				//TODO
 				/*OWLlinkReasonerConfiguration reasonerConfiguration =
 						new OWLlinkReasonerConfiguration(url);*/						

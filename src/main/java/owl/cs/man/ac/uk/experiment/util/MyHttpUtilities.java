@@ -3,8 +3,6 @@ package owl.cs.man.ac.uk.experiment.util;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Date;
 
@@ -61,7 +59,7 @@ public class MyHttpUtilities {
 	
 	public static boolean isValidURL(String url) {
 		try {
-			URL urlTest = new URL(url);
+			new URL(url);
 			return true;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

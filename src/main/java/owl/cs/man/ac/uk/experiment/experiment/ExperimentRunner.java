@@ -1,7 +1,6 @@
 package owl.cs.man.ac.uk.experiment.experiment;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

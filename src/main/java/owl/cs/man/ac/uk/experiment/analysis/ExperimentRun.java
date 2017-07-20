@@ -506,7 +506,7 @@ public class ExperimentRun {
 		data.put("delreasoner_conductedsat_ct", del_reasoner_conducting_sat_ct
 				+ "");
 		data.put("delreasoner_worst_cltime", delegate_worst_cl_time + "");
-		double serialfraction = 1 - (modcl_duration / cltime_all);
+		//double serialfraction = 1 - (modcl_duration / cltime_all);
 		/*
 		data.put(
 				"amsdahl_simulation_alldel",

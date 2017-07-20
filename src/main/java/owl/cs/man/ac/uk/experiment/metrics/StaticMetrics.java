@@ -85,11 +85,11 @@ public class StaticMetrics implements Metrics {
 									"http://www.semanticweb.org/nico/ontologies/2014/7/untitled-ontology-472#",
 									""));
 		}
-		System.out.println(sm.getAxiomsWithComplexRHS(true));
-		System.out.println(sm.getLogicalAxiomCount(true));
-		System.out.println(sm.getAVGSizeOfRHS(true));
+		System.out.println(sm.getAxiomsWithComplexRHS(Imports.INCLUDED));
+		System.out.println(sm.getLogicalAxiomCount(Imports.INCLUDED));
+		System.out.println(sm.getAVGSizeOfRHS(Imports.INCLUDED));
 
-		for (OWLAxiom ax : sm.getLogicalAxioms(true, true)) {
+		for (OWLAxiom ax : sm.getLogicalAxioms(Imports.INCLUDED, true)) {
 			System.out
 					.println(ax
 							.toString()
@@ -130,7 +130,7 @@ public class StaticMetrics implements Metrics {
 		return undeclared;
 	}
 
-	private boolean isTBoxContainsNominals(boolean b) {
+	private boolean isTBoxContainsNominals(Imports b) {
 		for (OWLAxiom ax : ExperimentUtilities.getTBoxAxioms(getLogicalAxioms(b, true))) {
 			for (OWLClassExpression cl : ax.getNestedClassExpressions()) {
 				if (cl instanceof OWLObjectOneOfImpl) {
@@ -145,7 +145,7 @@ public class StaticMetrics implements Metrics {
 		return false;
 	}
 	
-	private boolean isABoxContainsNominals(boolean b) {
+	private boolean isABoxContainsNominals(Imports b) {
 		for (OWLAxiom ax : ExperimentUtilities.getABoxAxioms(getLogicalAxioms(b, true))) {
 			for (OWLClassExpression cl : ax.getNestedClassExpressions()) {
 				if (cl instanceof OWLObjectOneOfImpl) {
@@ -158,28 +158,28 @@ public class StaticMetrics implements Metrics {
 		return false;
 	}
 
-	public int getClassCount(boolean includeImportsClosure) {
+	public int getClassCount(Imports includeImportsClosure) {
 		return getOntology().getClassesInSignature(includeImportsClosure)
 				.size();
 	}
 
-	public int getObjectPropertyCount(boolean includeImportsClosure) {
+	public int getObjectPropertyCount(Imports includeImportsClosure) {
 		return getOntology().getObjectPropertiesInSignature(
 				includeImportsClosure).size();
 	}
 
-	public int getDataPropertyCount(boolean includeImportsClosure) {
+	public int getDataPropertyCount(Imports included) {
 		return getOntology()
-				.getDataPropertiesInSignature(includeImportsClosure).size();
+				.getDataPropertiesInSignature(included).size();
 	}
 
-	public int getDatatypesCount(boolean includeImportsClosure) {
-		return getOntology().getDatatypesInSignature(includeImportsClosure)
+	public int getDatatypesCount(Imports included) {
+		return getOntology().getDatatypesInSignature(included)
 				.size();
 	}
 
 	public Map<String, Integer> getDatatypesWithAxiomOccurrenceCount(
-			boolean includeImportsClosure) {
+			Imports includeImportsClosure) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		Set<OWLAxiom> axioms = getAxioms(includeImportsClosure);
 		for (OWLAxiom axiom : axioms) {
@@ -201,10 +201,10 @@ public class StaticMetrics implements Metrics {
 		return map;
 	}
 
-	public Set<String> getBuiltInDatatypes(boolean includeImportsClosure) {
+	public Set<String> getBuiltInDatatypes(Imports included) {
 		Set<String> set = new HashSet<String>();
 		Set<OWLDatatype> datatypes = getOntology().getDatatypesInSignature(
-				includeImportsClosure);
+				included);
 		for (OWLDatatype datatype : datatypes) {
 			if (datatype.isBuiltIn()) {
 				set.add(datatype.getBuiltInDatatype().toString());
@@ -213,10 +213,10 @@ public class StaticMetrics implements Metrics {
 		return set;
 	}
 
-	public Set<String> getNotBuiltInDatatypes(boolean includeImportsClosure) {
+	public Set<String> getNotBuiltInDatatypes(Imports included) {
 		Set<String> set = new HashSet<String>();
 		Set<OWLDatatype> properties = getOntology().getDatatypesInSignature(
-				includeImportsClosure);
+				included);
 		for (OWLDatatype datatype : properties) {
 			if (!datatype.isBuiltIn()) {
 				set.add(datatype.toString());
@@ -233,14 +233,14 @@ public class StaticMetrics implements Metrics {
 		return getOntology().getAnnotations().size();
 	}
 
-	public int getIndividualsCount(boolean includeImportsClosure) {
-		return getOntology().getIndividualsInSignature(includeImportsClosure)
+	public int getIndividualsCount(Imports included) {
+		return getOntology().getIndividualsInSignature(included)
 				.size();
 	}
 
 	// AXIOMS
 
-	public int getNumberOfRules(boolean includeImportsClosure) {
+	public int getNumberOfRules(Imports includeImportsClosure) {
 		int ct = 0;
 		Set<OWLAxiom> logicalaxiom = getLogicalAxioms(includeImportsClosure,
 				false);
@@ -254,11 +254,11 @@ public class StaticMetrics implements Metrics {
 		return ct;
 	}
 
-	public int getAxiomsWithComplexRHS(boolean includeImportsClosure) {
+	public int getAxiomsWithComplexRHS(Imports included) {
 		// complex: RHS does not only contain nested conjuctions / atomic
 		// classnames
 		int ct = 0;
-		Set<OWLAxiom> logicalaxiom = getLogicalAxioms(includeImportsClosure,
+		Set<OWLAxiom> logicalaxiom = getLogicalAxioms(included,
 				false);
 		for (OWLAxiom ax : logicalaxiom) {
 			if (ax instanceof OWLSubClassOfAxiom) {
@@ -280,12 +280,12 @@ public class StaticMetrics implements Metrics {
 		return ct;
 	}
 
-	public double getAVGSizeOfRHS(boolean includeImportsClosure) {
+	public double getAVGSizeOfRHS(Imports included) {
 		// complex: RHS does not only contain nested conjuctions / atomic
 		// classnames
 		double ct = 0;
 		double ct_complex = 0;
-		Set<OWLAxiom> logicalaxiom = getLogicalAxioms(includeImportsClosure,
+		Set<OWLAxiom> logicalaxiom = getLogicalAxioms(included,
 				false);
 		for (OWLAxiom ax : logicalaxiom) {
 			if (ax instanceof OWLSubClassOfAxiom) {
@@ -330,7 +330,7 @@ public class StaticMetrics implements Metrics {
 		return false;
 	}
 
-	private Set<OWLAxiom> getLogicalAxioms(boolean includeImportsClosure,
+	private Set<OWLAxiom> getLogicalAxioms(Imports includeImportsClosure,
 			boolean skiprules) {
 		Set<AxiomType<?>> at = new HashSet<AxiomType<?>>();
 		at.addAll(AxiomType.TBoxAxiomTypes);
@@ -340,22 +340,17 @@ public class StaticMetrics implements Metrics {
 				includeImportsClosure, skiprules, at);
 	}
 
-	public Set<OWLAxiom> getAxioms(boolean includeImportsClosure) {
+	public Set<OWLAxiom> getAxioms(Imports included) {
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
-		axioms.addAll(getOntology().getAxioms());
-		if (includeImportsClosure) {
-			for (OWLOntology o : getOntology().getImports()) {
-				axioms.addAll(o.getAxioms());
-			}
-		}
+		axioms.addAll(getOntology().getAxioms(Imports.INCLUDED));
 		return axioms;
 	}
 
-	public int getAxiomCount(boolean includeImportsClosure) {
+	public int getAxiomCount(Imports includeImportsClosure) {
 		return getAxioms(includeImportsClosure).size();
 	}
 
-	public int getLogicalAxiomCount(boolean includeImportsClosure) {
+	public int getLogicalAxiomCount(Imports includeImportsClosure) {
 		return getLogicalAxioms(includeImportsClosure, true).size();
 	}
 
@@ -363,7 +358,7 @@ public class StaticMetrics implements Metrics {
 		return getOntology().getTBoxAxioms(useImportsClosure).size();
 	}
 
-	public int getTBoxRboxSize(boolean useImportsClosure) {
+	public int getTBoxRboxSize(Imports useImportsClosure) {
 		int i = 0;
 		Set<AxiomType<?>> axty = ExperimentUtilities.getTBoxAxiomTypes(true);
 		for (AxiomType<?> at : axty) {
@@ -380,7 +375,7 @@ public class StaticMetrics implements Metrics {
 		return getOntology().getRBoxAxioms(useImportsClosure).size();
 	}
 
-	public Map<String, Integer> getAxiomTypeCounts(boolean includeImportsClosure) {
+	public Map<String, Integer> getAxiomTypeCounts(Imports includeImportsClosure) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		Set<OWLAxiom> axioms = getAxioms(includeImportsClosure);
 
@@ -397,7 +392,7 @@ public class StaticMetrics implements Metrics {
 		return map;
 	}
 
-	public int getTautologyCount(boolean includeImports) {
+	public int getTautologyCount(Imports includeImports) {
 		int tautologies = 0;
 		for (OWLAxiom ax : getLogicalAxioms(includeImports, true)) {
 			if (TautologyChecker.isTautology(ax)) {
@@ -407,7 +402,7 @@ public class StaticMetrics implements Metrics {
 		return tautologies;
 	}
 
-	public Set<AxiomType<?>> getAxiomTypes(boolean includeImportsClosure) {
+	public Set<AxiomType<?>> getAxiomTypes(Imports includeImportsClosure) {
 		Set<AxiomType<?>> axtypes = new HashSet<AxiomType<?>>();
 		for (OWLAxiom ax : getAxioms(includeImportsClosure)) {
 			axtypes.add(ax.getAxiomType());
@@ -450,7 +445,7 @@ public class StaticMetrics implements Metrics {
 		// TODO: verify
 		boolean isRDFS = true;
 
-		loopAxioms: for (OWLAxiom ax : getAxioms(true)) {
+		loopAxioms: for (OWLAxiom ax : getAxioms(Imports.INCLUDED)) {
 			if (ax.isLogicalAxiom()) {
 				if (ax.isOfType(AxiomType.SUBCLASS_OF)) {
 					OWLSubClassOfAxiom subAx = (OWLSubClassOfAxiom) ax;
@@ -602,7 +597,7 @@ public class StaticMetrics implements Metrics {
 		return metric.getValue();
 	}
 
-	public double getAverageAssertedNamedSubclasses(boolean useImportsClosure) {
+	public double getAverageAssertedNamedSubclasses(Imports useImportsClosure) {
 		int count = 0;
 		for (OWLClass c : getOntology()
 				.getClassesInSignature(useImportsClosure)) {
@@ -614,7 +609,7 @@ public class StaticMetrics implements Metrics {
 		return avg;
 	}
 
-	public int getClassesWithSingleSubclassCount(boolean useImportsClosure) {
+	public int getClassesWithSingleSubclassCount(Imports useImportsClosure) {
 		int count = 0;
 		for (OWLClass c : getOntology()
 				.getClassesInSignature(useImportsClosure)) {
@@ -625,7 +620,7 @@ public class StaticMetrics implements Metrics {
 		return count;
 	}
 
-	public double getAverageInstancesPerClass(boolean useImportsClosure) {
+	public double getAverageInstancesPerClass(Imports useImportsClosure) {
 		int count = 0;
 		for (OWLClass c : getOntology()
 				.getClassesInSignature(useImportsClosure)) {
@@ -662,9 +657,9 @@ public class StaticMetrics implements Metrics {
 		}
 	}
 
-	public String getExpressivity(boolean importsClosureUsed) {
+	public String getExpressivity(boolean included) {
 		DLExpressivity dl = new DLExpressivity(getOntology());
-		dl.setImportsClosureUsed(importsClosureUsed);
+		dl.setImportsClosureUsed(included);
 		dl.setOntology(getOntology());
 		return dl.getValue();
 	}
@@ -686,7 +681,7 @@ public class StaticMetrics implements Metrics {
 		return constructs;
 	}
 
-	public boolean surelyContainsCycle(boolean includeImports) {
+	public boolean surelyContainsCycle(Imports includeImports) {
 		return OntologyCycleDetector.containsCycle(getOntology(),
 				includeImports);
 	}
@@ -711,7 +706,7 @@ public class StaticMetrics implements Metrics {
 	}
 
 	private String getMostFrequentlyUsedClassInLogicalAxioms(
-			boolean includeImportsClosure) {
+			Imports includeImportsClosure) {
 		Map<String, Integer> classCountMap = new HashMap<String, Integer>();
 		for (OWLAxiom eachAxiom : getLogicalAxioms(includeImportsClosure, true)) {
 			if(!(eachAxiom instanceof OWLSubClassOfAxiom)) {
@@ -744,7 +739,7 @@ public class StaticMetrics implements Metrics {
 		return maxClassString;
 	}
 
-	private int getLongestAxiomLength(boolean includeImportsClosure) {
+	private int getLongestAxiomLength(Imports includeImportsClosure) {
 		int longestAxiomLength = 0;
 
 		for (OWLAxiom eachAxiom : getLogicalAxioms(includeImportsClosure, true)) {
@@ -776,12 +771,12 @@ public class StaticMetrics implements Metrics {
 		return length;
 	}
 
-	private int getDatatypesNotBuiltinCount(boolean includeImportsClosure) {
-		return getNotBuiltInDatatypes(includeImportsClosure).size();
+	private int getDatatypesNotBuiltinCount(Imports included) {
+		return getNotBuiltInDatatypes(included).size();
 	}
 
-	private int getDatatypesBuiltinCount(boolean includeImportsClosure) {
-		return getBuiltInDatatypes(includeImportsClosure).size();
+	private int getDatatypesBuiltinCount(Imports included) {
+		return getBuiltInDatatypes(included).size();
 	}
 
 	public String getSignatureWithoutIRIs(Imports incl) {
@@ -791,11 +786,11 @@ public class StaticMetrics implements Metrics {
 				continue;
 			}
 			if (e instanceof OWLClass) {
-				b.append(e.getIRI().getFragment() + "; ");
+				b.append(e.getIRI().getRemainder().or("unknown") + "; ");
 			} else if (e instanceof OWLObjectProperty) {
-				b.append(e.getIRI().getFragment() + "; ");
+				b.append(e.getIRI().getRemainder().or("unknown") + "; ");
 			} else if (e instanceof OWLDataProperty) {
-				b.append(e.getIRI().getFragment() + "; ");
+				b.append(e.getIRI().getRemainder().or("unknown") + "; ");
 			}
 		}
 		String returnstring = b.toString().contains(";") ? b.toString()
@@ -847,63 +842,63 @@ public class StaticMetrics implements Metrics {
 		csvData.put(prefix + "owlapi_version", ExperimentUtilities
 				.getResourcePath(getOntology()).getName());
 		csvData.put(prefix + MetricsLabels.CLASS_COUNT_INCL,
-				getClassCount(true) + "");
-		csvData.put(prefix + MetricsLabels.CLASS_COUNT, getClassCount(false)
+				getClassCount(Imports.INCLUDED) + "");
+		csvData.put(prefix + MetricsLabels.CLASS_COUNT, getClassCount(Imports.EXCLUDED)
 				+ "");
 		csvData.put(prefix + MetricsLabels.ANNOTATION_PROP_COUNT,
 				getAnnotationPropertyCount() + "");
 		csvData.put(prefix + MetricsLabels.ANNOTATIONS_COUNT,
 				getAnnotationsCount() + "");
 		csvData.put(prefix + MetricsLabels.DATATYPE_BUILTIN_COUNT_INCL,
-				getDatatypesBuiltinCount(true) + "");
+				getDatatypesBuiltinCount(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.DATATYPE_BUILTIN_COUNT,
-				getDatatypesBuiltinCount(false) + "");
+				getDatatypesBuiltinCount(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.DATATYPE_NOTBUILTIN_COUNT_INCL,
-				getDatatypesNotBuiltinCount(true) + "");
+				getDatatypesNotBuiltinCount(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.DATATYPE_NOTBUILTIN_COUNT,
-				getDatatypesNotBuiltinCount(false) + "");
+				getDatatypesNotBuiltinCount(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.INDIVIDUAL_COUNT_INCL,
-				getIndividualsCount(true) + "");
+				getIndividualsCount(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.INDIVIDUAL_COUNT,
-				getIndividualsCount(false) + "");
+				getIndividualsCount(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.AXIOM_COMPLEXRHS_COUNT_INCL,
-				getAxiomsWithComplexRHS(true) + "");
+				getAxiomsWithComplexRHS(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.AXIOM_COMPLEXRHS_COUNT,
-				getAxiomsWithComplexRHS(false) + "");
+				getAxiomsWithComplexRHS(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.AVG_SIZE_COMPLEXRHS_INCL,
-				getAVGSizeOfRHS(true) + "");
+				getAVGSizeOfRHS(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.AVG_SIZE_COMPLEXRHS,
-				getAVGSizeOfRHS(false) + "");
+				getAVGSizeOfRHS(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.OBJPROPERTY_COUNT_INCL,
-				getObjectPropertyCount(true) + "");
+				getObjectPropertyCount(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.OBJPROPERTY_COUNT,
-				getObjectPropertyCount(false) + "");
+				getObjectPropertyCount(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.DATAPROPERTY_COUNT_INCL,
-				getDataPropertyCount(true) + "");
+				getDataPropertyCount(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.DATAPROPERTY_COUNT,
-				getDataPropertyCount(false) + "");
+				getDataPropertyCount(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.DATATYPE_COUNT_INCL,
-				getDatatypesCount(true) + "");
+				getDatatypesCount(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.DATATYPE_COUNT,
-				getDatatypesCount(false) + "");
+				getDatatypesCount(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.EXPRESSIVITY, getExpressivity(false)
 				+ "");
 		csvData.put(prefix + MetricsLabels.EXPRESSIVITY_INCL,
 				getExpressivity(true) + "");
 		csvData.put(prefix + MetricsLabels.LOGICAL_AXIOM_COUNT,
-				getLogicalAxiomCount(false) + "");
+				getLogicalAxiomCount(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.LOGICAL_AXIOM_COUNT_INCL,
-				getLogicalAxiomCount(true) + "");
+				getLogicalAxiomCount(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.TBOX_SIZE, getTBoxSize(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.TBOX_SIZE_INCL, getTBoxSize(Imports.INCLUDED)
 				+ "");
 		csvData.put(prefix + MetricsLabels.TBOXRBOX_SIZE,
-				getTBoxRboxSize(false) + "");
+				getTBoxRboxSize(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.TBOXRBOX_SIZE_INCL,
-				getTBoxRboxSize(true) + "");
-		csvData.put(prefix + MetricsLabels.RULE_CT, getNumberOfRules(false)
+				getTBoxRboxSize(Imports.INCLUDED) + "");
+		csvData.put(prefix + MetricsLabels.RULE_CT, getNumberOfRules(Imports.EXCLUDED)
 				+ "");
-		csvData.put(prefix + MetricsLabels.RULE_CT_INCL, getNumberOfRules(true)
+		csvData.put(prefix + MetricsLabels.RULE_CT_INCL, getNumberOfRules(Imports.INCLUDED)
 				+ "");
 		csvData.put(prefix + MetricsLabels.RBOX_SIZE, getRBoxSize(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.RBOX_SIZE_INCL, getRBoxSize(Imports.INCLUDED)
@@ -934,6 +929,11 @@ public class StaticMetrics implements Metrics {
 						.createSpaceSeperatedStringFromSet(getValidImports(false))
 						+ "");
 		csvData.put(
+				prefix + MetricsLabels.VALID_IMPORTS_INCL,
+				OntologyUtilities
+						.createSpaceSeperatedStringFromSet(getValidImports(true))
+						+ "");
+		csvData.put(
 				prefix + MetricsLabels.CONSTRUCTS_INCL,
 				OntologyUtilities
 						.createSpaceSeperatedStringFromSet(getConstructs(true))
@@ -946,31 +946,31 @@ public class StaticMetrics implements Metrics {
 		csvData.put(
 				prefix + MetricsLabels.AXIOM_TYPES,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromSet(getAxiomTypes(false))
+						.createSpaceSeperatedStringFromSet(getAxiomTypes(Imports.EXCLUDED))
 						+ "");
 		csvData.put(
 				prefix + MetricsLabels.AXIOM_TYPES_INCL,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromSet(getAxiomTypes(true))
+						.createSpaceSeperatedStringFromSet(getAxiomTypes(Imports.INCLUDED))
 						+ "");
 		csvData.put(
 				prefix + MetricsLabels.AXIOMTYPE_COUNT,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromMap(getAxiomTypeCounts(false))
+						.createSpaceSeperatedStringFromMap(getAxiomTypeCounts(Imports.EXCLUDED))
 						+ "");
 		csvData.put(
 				prefix + MetricsLabels.AXIOMTYPE_COUNT_INCL,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromMap(getAxiomTypeCounts(true))
+						.createSpaceSeperatedStringFromMap(getAxiomTypeCounts(Imports.INCLUDED))
 						+ "");
 		csvData.put(prefix + MetricsLabels.TBOX_CONTAINS_NOMINALS_INCL,
-				isTBoxContainsNominals(true) + "");
+				isTBoxContainsNominals(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.TBOX_CONTAINS_NOMINALS,
-				isTBoxContainsNominals(false) + "");
+				isTBoxContainsNominals(Imports.EXCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.ABOX_CONTAINS_NOMINALS_INCL,
-				isABoxContainsNominals(true) + "");
+				isABoxContainsNominals(Imports.INCLUDED) + "");
 		csvData.put(prefix + MetricsLabels.ABOX_CONTAINS_NOMINALS,
-				isABoxContainsNominals(false) + "");
+				isABoxContainsNominals(Imports.EXCLUDED) + "");
 		return csvData;
 	}
 
@@ -982,28 +982,28 @@ public class StaticMetrics implements Metrics {
 		Map<String, String> csvData = new HashMap<String, String>();
 		csvData.putAll(getEssentialMetrics());
 		
-		csvData.put(MetricsLabels.MAX_AXIOMLENGTH, getLongestAxiomLength(false)
+		csvData.put(MetricsLabels.MAX_AXIOMLENGTH, getLongestAxiomLength(Imports.EXCLUDED)
 				+ "");
 		csvData.put(MetricsLabels.MAX_AXIOMLENGTH_INCL,
-				getLongestAxiomLength(true) + "");
+				getLongestAxiomLength(Imports.INCLUDED) + "");
 		
 		csvData.put(MetricsLabels.AVG_ASSERT_N_SUBCLASS_INCL,
-				getAverageAssertedNamedSubclasses(true) + "");
+				getAverageAssertedNamedSubclasses(Imports.INCLUDED) + "");
 		csvData.put(MetricsLabels.AVG_ASSERT_N_SUBCLASS,
-				getAverageAssertedNamedSubclasses(false) + "");
+				getAverageAssertedNamedSubclasses(Imports.EXCLUDED) + "");
 		csvData.put(MetricsLabels.AVG_ASSERT_N_SUPERCLASS_INCL,
 				getAverageAssertedNamedSuperclasses(true) + "");
 		csvData.put(MetricsLabels.AVG_ASSERT_N_SUPERCLASS,
 				getAverageAssertedNamedSuperclasses(false) + "");
 		csvData.put(MetricsLabels.AVG_INSTANCE_PER_CLASS_INCL,
-				getAverageInstancesPerClass(true) + "");
+				getAverageInstancesPerClass(Imports.INCLUDED) + "");
 		csvData.put(MetricsLabels.AVG_INSTANCE_PER_CLASS,
-				getAverageInstancesPerClass(false) + "");
+				getAverageInstancesPerClass(Imports.EXCLUDED) + "");
 		
 		csvData.put(MetricsLabels.CLASS_SGL_SUBCLASS_COUNT_INCL,
-				getClassesWithSingleSubclassCount(true) + "");
+				getClassesWithSingleSubclassCount(Imports.INCLUDED) + "");
 		csvData.put(MetricsLabels.CLASS_SGL_SUBCLASS_COUNT,
-				getClassesWithSingleSubclassCount(false) + "");
+				getClassesWithSingleSubclassCount(Imports.EXCLUDED) + "");
 		
 		csvData.put(MetricsLabels.GCI_COUNT_INCL, getGCICount(true) + "");
 		csvData.put(MetricsLabels.GCI_COUNT, getGCICount(false) + "");
@@ -1047,17 +1047,17 @@ public class StaticMetrics implements Metrics {
 		csvData.put(MetricsLabels.UNDECLARED_ENTITY_COUNT,
 				getUndeclaredEntitiesCount(Imports.EXCLUDED) + "");
 		
-		csvData.put(MetricsLabels.TAUTOLOGYCOUNT, getTautologyCount(false) + "");
-		csvData.put(MetricsLabels.TAUTOLOGYCOUNT_INCL, getTautologyCount(true)
+		csvData.put(MetricsLabels.TAUTOLOGYCOUNT, getTautologyCount(Imports.EXCLUDED) + "");
+		csvData.put(MetricsLabels.TAUTOLOGYCOUNT_INCL, getTautologyCount(Imports.INCLUDED)
 				+ "");
 
-		if (surelyContainsCycle(true)) {
+		if (surelyContainsCycle(Imports.INCLUDED)) {
 			csvData.put(MetricsLabels.CYCLE_INCL, "1");
 		} else {
 			csvData.put(MetricsLabels.CYCLE_INCL, "unkown");
 		}
 
-		if (surelyContainsCycle(false)) {
+		if (surelyContainsCycle(Imports.EXCLUDED)) {
 			csvData.put(MetricsLabels.CYCLE, "1");
 		} else {
 			csvData.put(MetricsLabels.CYCLE, "unkown");
@@ -1066,32 +1066,32 @@ public class StaticMetrics implements Metrics {
 		csvData.put(
 				MetricsLabels.DATATYPE_AXIOMCOUNT,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromMap(getDatatypesWithAxiomOccurrenceCount(false))
+						.createSpaceSeperatedStringFromMap(getDatatypesWithAxiomOccurrenceCount(Imports.EXCLUDED))
 						+ "");
 		csvData.put(
 				MetricsLabels.DATATYPE_AXIOMCOUNT_INCL,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromMap(getDatatypesWithAxiomOccurrenceCount(true))
+						.createSpaceSeperatedStringFromMap(getDatatypesWithAxiomOccurrenceCount(Imports.INCLUDED))
 						+ "");
 		csvData.put(
 				MetricsLabels.DATATYPES,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromSet(getBuiltInDatatypes(false))
+						.createSpaceSeperatedStringFromSet(getBuiltInDatatypes(Imports.EXCLUDED))
 						+ "");
 		csvData.put(
 				MetricsLabels.DATATYPES_INCL,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromSet(getBuiltInDatatypes(true))
+						.createSpaceSeperatedStringFromSet(getBuiltInDatatypes(Imports.INCLUDED))
 						+ "");
 		csvData.put(
 				MetricsLabels.DATATYPES_NOT_BUILT_IN,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromSet(getNotBuiltInDatatypes(false))
+						.createSpaceSeperatedStringFromSet(getNotBuiltInDatatypes(Imports.EXCLUDED))
 						+ "");
 		csvData.put(
 				MetricsLabels.DATATYPES_NOT_BUILT_IN_INCL,
 				OntologyUtilities
-						.createSpaceSeperatedStringFromSet(getNotBuiltInDatatypes(true))
+						.createSpaceSeperatedStringFromSet(getNotBuiltInDatatypes(Imports.INCLUDED))
 						+ "");
 		csvData.put(
 				MetricsLabels.MISSING_INPORTS,
@@ -1099,7 +1099,7 @@ public class StaticMetrics implements Metrics {
 						.createSpaceSeperatedStringFromSet(getMissingImportsDeclarations())
 						+ "");
 		
-		csvData.put(MetricsLabels.MOST_FRQUENTLY_USED_CONCEPT, getMostFrequentlyUsedClassInLogicalAxioms(false) + "");
+		csvData.put(MetricsLabels.MOST_FRQUENTLY_USED_CONCEPT, getMostFrequentlyUsedClassInLogicalAxioms(Imports.EXCLUDED) + "");
 		
 
 		return csvData;

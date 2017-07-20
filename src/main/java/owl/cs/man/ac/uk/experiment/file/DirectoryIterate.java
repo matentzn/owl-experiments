@@ -2,6 +2,7 @@ package owl.cs.man.ac.uk.experiment.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -18,9 +19,9 @@ public class DirectoryIterate {
 			
 		for (File file : sourceDir.listFiles()) {
 			if(file.isFile()) {
-				List<String> fileLines = FileUtils.readLines(file);
+				List<String> fileLines = FileUtils.readLines(file,StandardCharsets.UTF_8);
 				String lastline = fileLines.get(fileLines.size()-1);
-				String linebeforethat = fileLines.get(fileLines.size()-2);
+				//String linebeforethat = fileLines.get(fileLines.size()-2);
 				if(lastline.contains("NULL")) {
 					System.out.println(lastline);
 					System.out.println(file);

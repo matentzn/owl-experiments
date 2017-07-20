@@ -5,11 +5,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtilities {
-	
+
 	public static final String REGEX_BEGIN_OR_WHITESPACE_OR_UNDERSCORE = "(?<![^\\s_])";
 	public static final String REGEX_END_OR_NONALPHANUMERIC = "(?![^\\s\\W_])";
 	public static final String REGEX_NUMERIC = "[-+]?[0-9]*[\\.,]?[0-9]+([eE][-+]?[0-9]+)?";
-	
+
 	public static int countSubstring(String s, String sub) {
 		Pattern p = Pattern.compile(sub);
 		Matcher m = p.matcher(s);
@@ -19,7 +19,7 @@ public class StringUtilities {
 		}
 		return count;
 	}
-	
+
 	public static String lrs(String s) {
 
 		// / FROM: http://introcs.cs.princeton.edu/java/42sort/LRS.java.html
@@ -54,29 +54,24 @@ public class StringUtilities {
 		}
 		return s.substring(0, n);
 	}
-	
+
 	public static boolean regexMatchesString(String regex, String string, boolean ignoreCase) {
-		Pattern p = ignoreCase ? Pattern.compile(regex , Pattern.CASE_INSENSITIVE) : Pattern.compile(regex);
-	    Matcher m = p.matcher(string);
-	    if(m.find()) {
-	    	return true;
-	    } 
-	    else {
-	    	return false;
-	    }
+		Pattern p = ignoreCase ? Pattern.compile(regex, Pattern.CASE_INSENSITIVE) : Pattern.compile(regex);
+		Matcher m = p.matcher(string);
+		if (m.find()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-	
-	public static boolean isNumeric(String str)  
-	{  
-	  try  
-	  {  
-	    double d = Double.parseDouble(str);  
-	  }  
-	  catch(NumberFormatException nfe)  
-	  {  
-	    return false;  
-	  }  
-	  return true;  
+
+	public static boolean isNumeric(String str) {
+		try {
+			Double.parseDouble(str);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
 	}
 
 }

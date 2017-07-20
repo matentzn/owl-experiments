@@ -10,6 +10,7 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.parameters.Imports;
 
 import owl.cs.man.ac.uk.experiment.util.ExperimentUtilities;
 
@@ -47,7 +48,7 @@ public class OntologyAxiomFilterer {
 		Set<OWLAxiom> filteredAxioms = new HashSet<OWLAxiom>();
 		Set<AxiomType<?>> tboxaxiomtypes = new HashSet<AxiomType<?>>(AxiomType.TBoxAxiomTypes);
 		tboxaxiomtypes.addAll(AxiomType.RBoxAxiomTypes);
-		for(OWLAxiom ax : ExperimentUtilities.getLogicalAxioms(o, true, false,tboxaxiomtypes)) {
+		for(OWLAxiom ax : ExperimentUtilities.getLogicalAxioms(o, Imports.INCLUDED, false,tboxaxiomtypes)) {
 			if(tboxaxiomtypes.contains(ax.getAxiomType())) {
 				filteredAxioms.add(ax);
 			}

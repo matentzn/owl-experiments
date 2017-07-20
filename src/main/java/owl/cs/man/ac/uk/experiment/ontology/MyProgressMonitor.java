@@ -12,6 +12,10 @@ public class MyProgressMonitor extends Observable implements
 		ReasonerProgressMonitor {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 239957853655478742L;
+	/**
 	 * The ReasonerProgressMonitor Interface is provided by the OWL API and
 	 * implemented here. It is the way to determine what current state the
 	 * reasoner is in: whether is is classiying or realizing, or what the

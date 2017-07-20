@@ -53,6 +53,7 @@ public class UltimateCSVReader {
 			}
 			records.add(record);
 		}
+		reader.close();
 	}
 
 	public List<Map<String, String>> getRecords() {

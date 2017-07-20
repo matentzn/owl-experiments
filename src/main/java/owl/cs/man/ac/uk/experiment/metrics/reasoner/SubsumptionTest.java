@@ -3,8 +3,6 @@ package owl.cs.man.ac.uk.experiment.metrics.reasoner;
 import java.util.HashMap;
 import java.util.Map;
 
-import owl.cs.man.ac.uk.experiment.metrics.reasoner.ReasonerMetrics.STType;
-
 public class SubsumptionTest {
 	
 	final String superClass;

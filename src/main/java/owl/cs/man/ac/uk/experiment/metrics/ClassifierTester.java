@@ -1,15 +1,11 @@
 package owl.cs.man.ac.uk.experiment.metrics;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import owl.cs.man.ac.uk.experiment.csv.CSVUtilities;
@@ -18,7 +14,7 @@ public class ClassifierTester {
 
 	public static void main(String[] args) {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		List<Map<String,String>> data = new ArrayList<Map<String,String>>();
+		//List<Map<String,String>> data = new ArrayList<Map<String,String>>();
 		File csv = new File("D:\\0testout\\classifier\\records.csv");
 		for(File file:(new File("D:\\Data\\bp11-2012\\ontologies")).listFiles()) {
 			Map<String,String> cldata = new HashMap<String,String>();

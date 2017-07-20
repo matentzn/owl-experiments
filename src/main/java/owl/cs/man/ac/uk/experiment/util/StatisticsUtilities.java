@@ -1,9 +1,6 @@
 package owl.cs.man.ac.uk.experiment.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;

@@ -24,6 +24,7 @@ import org.semanticweb.owlapi.model.OWLOntologyIRIMapper;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.UnloadableImportException;
+import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.util.AutoIRIMapper;
@@ -235,8 +236,8 @@ public class CompareOntologies {
 		}
 		//AnalysisUtils.pp("AXIOMS");
 
-		Set<OWLEntity> sigo1 = ExperimentUtilities.getSignature(o1,true);
-		Set<OWLEntity> sigo2 = ExperimentUtilities.getSignature(o2,true);
+		Set<OWLEntity> sigo1 = ExperimentUtilities.getSignature(o1,Imports.INCLUDED);
+		Set<OWLEntity> sigo2 = ExperimentUtilities.getSignature(o2,Imports.INCLUDED);
 		Set<OWLEntity> entitieso1 = getEntitiesInO1notinO2(sigo1, sigo2,
 				o1_short, o2_short);
 		Set<OWLEntity> entitieso2 = getEntitiesInO1notinO2(sigo2, sigo1,
@@ -332,12 +333,12 @@ public class CompareOntologies {
 
 		// - o1.getClassesInSignature().size() because we dont need the a
 		// scl a test
-		long subsumptiontesto1 = (o1.getClassesInSignature(true).size() * o1
+		long subsumptiontesto1 = (o1.getClassesInSignature(Imports.INCLUDED).size() * o1
 				.getClassesInSignature().size())
 				- o1.getClassesInSignature().size();
-		long subsumptiontesto2 = (o2.getClassesInSignature(true).size() * o2
-				.getClassesInSignature(true).size())
-				- o2.getClassesInSignature(true).size();
+		long subsumptiontesto2 = (o2.getClassesInSignature(Imports.INCLUDED).size() * o2
+				.getClassesInSignature(Imports.INCLUDED).size())
+				- o2.getClassesInSignature(Imports.INCLUDED).size();
 
 		double diff = (double) Math.abs(subsumptiontesto1 - subsumptiontesto2);
 		double average = ((double) subsumptiontesto1 + (double) subsumptiontesto2) / 2;

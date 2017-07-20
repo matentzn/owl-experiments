@@ -4,17 +4,15 @@ import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -22,8 +20,6 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
-import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 
@@ -61,42 +57,13 @@ public class FileUtilities {
 		return dir.delete();
 	}
 
-	public static void copyFile(File sourceFile, File destFile)
-			throws IOException {
-		/*
-		 * Adapted from:
-		 * http://stackoverflow.com/questions/1146153/copying-files
-		 * -from-one-directory-to-another-in-java
-		 */
-		System.out.println("Copy " + sourceFile.getAbsolutePath() + " to "
-				+ destFile.getAbsolutePath());
-		if (!sourceFile.exists()) {
-			return;
-		}
-		if (!destFile.exists()) {
-			destFile.createNewFile();
-		}
-		FileChannel source = null;
-		FileChannel destination = null;
-		source = new FileInputStream(sourceFile).getChannel();
-		destination = new FileOutputStream(destFile).getChannel();
-		if (destination != null && source != null) {
-			destination.transferFrom(source, 0, source.size());
-		}
-		if (source != null) {
-			source.close();
-		}
-		if (destination != null) {
-			destination.close();
-		}
-	}
 
 	public static void writeStringToFile(File file, String content) throws IOException {
 		writeStringToFile(file, content, false);
 	}
 	
 	public static void writeStringToFile(File file, String content, boolean append) throws IOException {
-		FileUtils.writeStringToFile(file, content, append);
+		FileUtils.writeStringToFile(file, content,StandardCharsets.UTF_8, append);
 	}
 
 	public static File addExtension(File file, String extension) {
@@ -193,18 +160,19 @@ public class FileUtilities {
 		try {
 			scan = new Scanner(file);
 			while (scan.hasNextLine()) {
-				return scan.nextLine();
+				String nl = scan.nextLine(); 
+				scan.close();
+				return nl;
 			}
 		} catch (FileNotFoundException e) {
 			System.err.println("File " + file + " does not exist.");
 		}
-
 		return null;
 	}
 
 	public static void appendStringToLineInFileAndWrite(File file,
 			String columnames, int linenumber) throws IOException {
-		List<String> oldfile = FileUtils.readLines(file);
+		List<String> oldfile = FileUtils.readLines(file,StandardCharsets.UTF_8);
 		String firstline = oldfile.get(linenumber);
 		firstline += columnames;
 		oldfile.set(linenumber, firstline);

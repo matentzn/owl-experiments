@@ -53,7 +53,7 @@ public class FileFeatureCounter {
 		while ((br.read()) != -1) {
             counter++;
         }
-
+		br.close();
         return counter;
 	}
 

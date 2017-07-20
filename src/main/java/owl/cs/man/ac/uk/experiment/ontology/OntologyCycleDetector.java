@@ -3,6 +3,7 @@ package owl.cs.man.ac.uk.experiment.ontology;
 import java.util.*;
 
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.parameters.Imports;
 
 public class OntologyCycleDetector {
 
@@ -13,7 +14,7 @@ public class OntologyCycleDetector {
 	/*
 	 * Sound, but maybe incomplete (may miss some cycles).
 	 */
-	public static boolean containsCycle(OWLOntology ontology, boolean includeImports) {
+	public static boolean containsCycle(OWLOntology ontology, Imports includeImports) {
 		final Set<OWLClass> Classes = ontology.getClassesInSignature(includeImports);
 		System.out.println("DeCycler Started with " + Classes.size()
 				+ " classes");
@@ -55,9 +56,9 @@ public class OntologyCycleDetector {
 	}
 
 	public static Set<OWLAxiom> getReferencingAxioms(OWLOntology ontology,
-			OWLClass current, boolean includeImports) {
+			OWLClass current, Imports includeImports) {
 		Set<OWLAxiom> refs = new HashSet<OWLAxiom>();
-		if(includeImports) {
+		if(includeImports==Imports.INCLUDED) {
 			for(OWLOntology o:ontology.getImportsClosure()) {
 				refs.addAll(o.getReferencingAxioms(current));
 			}

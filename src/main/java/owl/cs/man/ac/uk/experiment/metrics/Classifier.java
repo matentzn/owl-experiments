@@ -182,7 +182,7 @@ public class Classifier {
 			return annotation.replaceAll(" ", "+").replaceAll("[^A-Za-z+]", "");
 		}
 
-		String fragment = e.getIRI().getFragment();
+		String fragment = e.getIRI().getRemainder().or("unkown");
 		if (fragment == null) {
 			return "";
 		}

@@ -2,6 +2,7 @@ package owl.cs.man.ac.uk.experiment.csv;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -86,7 +87,7 @@ public class CSVUtilities {
 
 	public static void writeCSVHead(File file, List<String> columns)
 			throws IOException {
-		FileUtils.writeStringToFile(file, listToCSV(columns) + "\n", false);
+		FileUtils.writeStringToFile(file, listToCSV(columns) + "\n", StandardCharsets.UTF_8 ,false);
 	}
 
 	private static void appendRecords(File file,
@@ -96,7 +97,7 @@ public class CSVUtilities {
 		for (Map<String, String> record : records) {
 			content.append(createRecord(record, columns));
 		}
-		FileUtils.writeStringToFile(file, content.toString(), true);
+		FileUtils.writeStringToFile(file, content.toString(), StandardCharsets.UTF_8, true);
 	}
 
 	private static boolean appendNonExistingColumns(
@@ -149,7 +150,7 @@ public class CSVUtilities {
 		if (vs.contains(",")) {
 			vs = "\"" + vs + "\"";
 		}
-		return vs;
+		return vs.replaceAll("(\\r|\\n)", " CRLF ");
 	}
 
 	public static List<Map<String, String>> getAllRecords(File csv) {

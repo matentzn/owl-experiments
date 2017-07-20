@@ -36,6 +36,8 @@ public class FileListReader {
 			files.add(nextLine[0]);	
 			}
 		}
+		
+		reader.close();
 	}
 
 	public List<String> getFiles() {

@@ -44,6 +44,7 @@ public class OntologyRepairExperiment extends Experiment {
 				.replaceAll(".owl", "").replaceAll(".xml", "")
 				.replaceAll(".rdf", "").replaceAll(" ", "");
 
+		addResult("filenamenew",filename_new);
 		System.out.println("Initialising..");
 		
 		File out = new File(outputDir, getOntologyFile().getName().replaceAll(" ",

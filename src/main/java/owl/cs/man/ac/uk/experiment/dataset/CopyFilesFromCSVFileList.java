@@ -2,6 +2,7 @@ package owl.cs.man.ac.uk.experiment.dataset;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -39,7 +40,7 @@ public class CopyFilesFromCSVFileList {
 			throw new IllegalArgumentException("target DIR must exist!");
 		}
 		
-		List<String> files = FileUtils.readLines(filelist);
+		List<String> files = FileUtils.readLines(filelist,StandardCharsets.UTF_8);
 		
 		System.out.println(files.size());
 		

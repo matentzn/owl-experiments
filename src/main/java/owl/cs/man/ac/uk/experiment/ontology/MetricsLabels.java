@@ -240,6 +240,7 @@ public class MetricsLabels {
 	public static final String ABOX_CONTAINS_NOMINALS = "abox_nominals";
 	public static final String ABOX_CONTAINS_NOMINALS_INCL = "abox_nominals_incl";
 	public static final String MOST_FRQUENTLY_USED_CONCEPT = "most_freq_concept";
+	public static final String VALID_IMPORTS_INCL = "valid_imports_incl";
 	
 	public static String createSpaceSeperatedStringFromSet(Set<String> set) {
 		StringBuilder builder = new StringBuilder();

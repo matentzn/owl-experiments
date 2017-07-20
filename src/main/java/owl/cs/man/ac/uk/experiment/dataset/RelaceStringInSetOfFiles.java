@@ -2,10 +2,8 @@ package owl.cs.man.ac.uk.experiment.dataset;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
@@ -33,8 +31,8 @@ public class RelaceStringInSetOfFiles {
 
 		for (File file : dir.listFiles()) {
 			try {
-				List<String> lines = FileUtils.readLines(file);
-				List<String> newLines = FileUtils.readLines(file);
+				List<String> lines = FileUtils.readLines(file,StandardCharsets.UTF_8);
+				List<String> newLines = FileUtils.readLines(file,StandardCharsets.UTF_8);
 				for (String line : lines) {
 					newLines.add(line.replaceAll(regex, replacement));
 				}

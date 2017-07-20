@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,10 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import org.apache.commons.io.FileUtils;
-import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
@@ -36,19 +34,19 @@ import org.semanticweb.owlapi.model.OWLOntologyIRIMapper;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.AutoIRIMapper;
 import org.semanticweb.owlapi.util.InferredAxiomGenerator;
 import org.semanticweb.owlapi.util.InferredEquivalentClassAxiomGenerator;
-import org.semanticweb.owlapi.util.InferredOntologyGenerator;
 import org.semanticweb.owlapi.util.InferredSubClassAxiomGenerator;
 
-import owl.cs.man.ac.uk.experiment.ontology.MetricsLabels;
-import owl.cs.man.ac.uk.experiment.ontology.OntologyFileNameFilter;
 import owl.cs.man.ac.uk.experiment.dataset.OntologySerialiser;
 import owl.cs.man.ac.uk.experiment.experiment.Experiment;
 import owl.cs.man.ac.uk.experiment.file.FileUtilities;
 import owl.cs.man.ac.uk.experiment.metrics.reasoner.ReasonerMetrics.ReasonerMetaData;
+import owl.cs.man.ac.uk.experiment.ontology.MetricsLabels;
+import owl.cs.man.ac.uk.experiment.ontology.OntologyFileNameFilter;
 
 public class ExperimentUtilities {
 
@@ -358,7 +356,7 @@ public class ExperimentUtilities {
 		}
 	}
 
-	public static Set<OWLEntity> getSignature(OWLOntology sub, boolean imports) {
+	public static Set<OWLEntity> getSignature(OWLOntology sub, Imports imports) {
 		Set<OWLEntity> seedSig = new HashSet<OWLEntity>();
 		seedSig.addAll(sub.getClassesInSignature(imports));
 		seedSig.addAll(sub.getObjectPropertiesInSignature(imports));
@@ -411,7 +409,7 @@ public class ExperimentUtilities {
 	}
 
 	public static Set<OWLAxiom> getLogicalAxioms(OWLOntology o,
-			boolean includeImportsClosure, boolean skiprules) {
+			Imports includeImportsClosure, boolean skiprules) {
 		Set<AxiomType<?>> types = new HashSet<AxiomType<?>>();
 		types.addAll(AxiomType.TBoxAxiomTypes);
 		types.addAll(AxiomType.RBoxAxiomTypes);
@@ -420,14 +418,14 @@ public class ExperimentUtilities {
 	}
 
 	public static Set<OWLAxiom> getLogicalAxioms(OWLOntology o,
-			boolean includeImportsClosure, boolean skiprules,
+			Imports includeImportsClosure, boolean skiprules,
 			Set<AxiomType<?>> types) {
 		return getLogicalAxioms(o, includeImportsClosure, skiprules, false,
 				types);
 	}
 
 	public static Set<OWLAxiom> getLogicalAxioms(OWLOntology o,
-			boolean includeImportsClosure, boolean skiprules,
+			Imports includeImportsClosure, boolean skiprules,
 			boolean stripaxiomanno, Set<AxiomType<?>> types) {
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		for (OWLAxiom ax : o.getLogicalAxioms()) {
@@ -435,7 +433,7 @@ public class ExperimentUtilities {
 				axioms.add(ax);
 			}
 		}
-		if (includeImportsClosure) {
+		if (includeImportsClosure == Imports.INCLUDED) {
 			for (OWLOntology imp : o.getImports()) {
 				for (OWLAxiom ax : imp.getLogicalAxioms()) {
 					if (types.contains(ax.getAxiomType())) {
@@ -624,7 +622,7 @@ public class ExperimentUtilities {
 	public static boolean ignoreFile(File ignorelist, String name) {
 		try {
 			Set<String> files = new HashSet<String>(
-					FileUtils.readLines(ignorelist));
+					FileUtils.readLines(ignorelist,StandardCharsets.UTF_8));
 			if (files.contains(name)) {
 				return true;
 			}

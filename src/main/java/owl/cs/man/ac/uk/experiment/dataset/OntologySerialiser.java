@@ -16,14 +16,13 @@ import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.model.parameters.Imports;
 
 import owl.cs.man.ac.uk.experiment.csv.CSVUtilities;
 import owl.cs.man.ac.uk.experiment.file.OntologyFileExtensions;
@@ -96,7 +95,7 @@ public class OntologySerialiser {
 						.loadOntologyFromOntologyDocument(exported_ontology);
 
 				StaticMetrics sm = new StaticMetrics(o_exported);
-				int logaxcount_exported = sm.getLogicalAxiomCount(true);
+				int logaxcount_exported = sm.getLogicalAxiomCount(Imports.INCLUDED);
 				data.putAll(sm.getEssentialMetrics());
 				data.putAll(ExperimentUtilities.getDefaultExperimentData(
 						"OntologySerialiser", exported_ontology));
@@ -144,7 +143,7 @@ public class OntologySerialiser {
 
 		OWLOntology o = manager.loadOntologyFromOntologyDocument(ontology);
 		StaticMetrics sm = new StaticMetrics(o);
-		logicalaxcount_original = sm.getLogicalAxiomCount(true);
+		logicalaxcount_original = sm.getLogicalAxiomCount(Imports.INCLUDED);
 		/*
 		 * System.out.println(o.getSignature(false).size());
 		 * System.out.println(o.getSignature(true).size()); Set<OWLEntity> cl =
@@ -241,10 +240,10 @@ public class OntologySerialiser {
 
 	public static void mergeOntologies(Set<OWLOntology> ontologies, String id,
 			OWLOntologyManager mergedManager, OWLOntology mergedOntology) {
-		OWLDataFactory df = mergedManager.getOWLDataFactory();
-		OWLAnnotationProperty sourceOntologyProperty = df
-				.getOWLAnnotationProperty(SOURCE_ONTOLOGY_ANNOTATIONPROP);
-		int ct = 0;
+		//OWLDataFactory df = mergedManager.getOWLDataFactory();
+		//OWLAnnotationProperty sourceOntologyProperty = df
+			//	.getOWLAnnotationProperty(SOURCE_ONTOLOGY_ANNOTATIONPROP);
+		//int ct = 0;
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		
 		for (OWLOntology ont : ontologies) {
