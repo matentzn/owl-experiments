@@ -26,6 +26,11 @@ import org.semanticweb.owlapi.profiles.OWL2Profile;
 import org.semanticweb.owlapi.profiles.OWLProfile;
 import org.semanticweb.owlapi.profiles.OWLProfileViolation;
 import org.semanticweb.owlapi.profiles.violations.OntologyVersionIRINotAbsolute;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredAnnotationProperty;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredClass;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredDataProperty;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredDatatype;
+import org.semanticweb.owlapi.profiles.violations.UseOfUndeclaredObjectProperty;
 
 import com.google.common.base.Optional;
 
@@ -41,9 +46,9 @@ public class OntologyUtilities {
 		//permittedViolationsForRepair.add(EmptyOneOfAxiom.class);
 		//permittedViolationsForRepair.add(InsufficientIndividuals.class);
 		//permittedViolationsForRepair.add(InsufficientPropertyExpressions.class);
-		//TODO: Deal with the two following that dont exist anymore
 		//permittedViolationsForRepair.add(InsufficientAxiomOperands.class);
 		//permittedViolationsForRepair.add(InsufficientObjectExpressionOperands.class);
+		
 		//permittedViolationsForRepair.add(OntologyIRINotAbsolute.class);
 		//permittedViolationsForRepair.add(OntologyVersionIRINotAbsolute.class);
 		//permittedViolationsForRepair.add(UseOfNonAbsoluteIRI.class);
@@ -52,6 +57,7 @@ public class OntologyUtilities {
 		//permittedViolationsForRepair.add(UseOfUndeclaredDataProperty.class);
 		//permittedViolationsForRepair.add(UseOfUndeclaredDatatype.class);
 		//permittedViolationsForRepair.add(UseOfUndeclaredObjectProperty.class);
+		
 		//permittedViolationsForRepair.add(CycleInDatatypeDefinition.class);
 		//permittedViolationsForRepair.add(DatatypeIRIAlsoUsedAsClassIRI.class);
 		//permittedViolationsForRepair.add(IllegalPunning.class);

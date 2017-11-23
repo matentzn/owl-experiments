@@ -47,7 +47,7 @@ public abstract class Experiment implements Callable<String> {
 		CSVUtilities.writeCSVData(file, data, false);
 	}
 	
-	protected void writeFailureData(Exception e) {
+	protected void writeFailureData(Throwable e) {
 		experimentResults.putAll(ExperimentUtilities.getDefaultFailureData(e));
 		exportResults();
 	}
@@ -71,7 +71,7 @@ public abstract class Experiment implements Callable<String> {
 			System.gc();
 			exportResults();
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			e.printStackTrace();
 			writeFailureData(e);
 			throw new RuntimeException(e);

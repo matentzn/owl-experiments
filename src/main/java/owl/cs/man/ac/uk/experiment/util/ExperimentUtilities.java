@@ -141,7 +141,7 @@ public class ExperimentUtilities {
 		}
 	}
 
-	public static Map<String, String> getDefaultFailureData(Exception e) {
+	public static Map<String, String> getDefaultFailureData(Throwable e) {
 		Map<String, String> csvdata = new HashMap<String, String>();
 		String stacktrace = e.getMessage();
 		if (stacktrace == null) {
@@ -409,12 +409,20 @@ public class ExperimentUtilities {
 	}
 
 	public static Set<OWLAxiom> getLogicalAxioms(OWLOntology o,
-			Imports includeImportsClosure, boolean skiprules) {
+			Imports includeImportsClosure, boolean skiprules, boolean leavedeclarations) {
 		Set<AxiomType<?>> types = new HashSet<AxiomType<?>>();
 		types.addAll(AxiomType.TBoxAxiomTypes);
 		types.addAll(AxiomType.RBoxAxiomTypes);
 		types.addAll(AxiomType.ABoxAxiomTypes);
+		if(leavedeclarations) {
+			types.add(AxiomType.DECLARATION);
+		}
 		return getLogicalAxioms(o, includeImportsClosure, skiprules, types);
+	}
+	
+	public static Set<OWLAxiom> getLogicalAxioms(OWLOntology o,
+			Imports includeImportsClosure, boolean skiprules) {
+		return getLogicalAxioms(o, includeImportsClosure, skiprules, false);
 	}
 
 	public static Set<OWLAxiom> getLogicalAxioms(OWLOntology o,
